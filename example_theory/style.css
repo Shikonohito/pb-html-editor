@@ -318,11 +318,30 @@ body {
     transition: transform 0.3s;
 }
 
+.block-body-wrapper {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 0.3s ease;
+}
+
+.block-body-wrapper.collapsed {
+    grid-template-rows: 0fr;
+}
+
 .block-body {
     background-color: var(--color-bg-content);
     padding: 1.2rem;
     border-bottom-left-radius: 0.35rem;
     border-bottom-right-radius: 0.35rem;
+    min-height: 0;
+    overflow: hidden;
+    transition: padding 0.3s ease, opacity 0.3s ease;
+}
+
+.block-body-wrapper.collapsed .block-body {
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
 }
 
 /* Code Block */

@@ -128,16 +128,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 2. Special Blocks Toggle Logic
     // ==========================================
+    // Wrap block bodies to allow smooth CSS grid animation
+    document.querySelectorAll('.block-body').forEach(blockBody => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'block-body-wrapper';
+        blockBody.parentNode.insertBefore(wrapper, blockBody);
+        wrapper.appendChild(blockBody);
+    });
+
     const toggleButtons = document.querySelectorAll('.toggle-block');
     toggleButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const blockBody = e.target.closest('.special-block').querySelector('.block-body');
-            const isHidden = getComputedStyle(blockBody).display === 'none';
+            const wrapper = e.target.closest('.special-block').querySelector('.block-body-wrapper');
+            const isHidden = wrapper.classList.contains('collapsed');
+            
             if (isHidden) {
-                blockBody.style.display = 'block';
+                wrapper.classList.remove('collapsed');
                 e.target.textContent = '▼';
             } else {
-                blockBody.style.display = 'none';
+                wrapper.classList.add('collapsed');
                 e.target.textContent = '▶';
             }
         });
