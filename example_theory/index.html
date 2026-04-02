@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продвинутый теоретический урок</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="mobile-fab" class="mobile-fab" aria-label="Открыть меню">☰</button>
+
+    <div id="overlay" class="overlay"></div>
+
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-top">
+            <button id="toggle-sidebar" class="hamburger-btn" aria-label="Скрыть меню">☰</button>
+        </div>
+        <div class="sidebar-logo">
+            <div style="width: 150px; height: 150px; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0a5a95; font-size: 2rem;">PyCode</div>
+        </div>
+        <div class="sidebar-creator">© Ivan Ivanov, 2026</div>
+        <div class="sidebar-separator">
+            <span>Содержание</span>
+        </div>
+        <nav class="sidebar-toc">
+            <a href="#section-intro" class="toc-link active"><span>1. Введение</span> <span class="active-marker">◀</span></a>
+            <a href="#section-datatypes" class="toc-link"><span>2. Базовые типы данных</span> <span class="active-marker">◀</span></a>
+            <a href="#section-collections" class="toc-link"><span>3. Коллекции</span> <span class="active-marker">◀</span></a>
+            <a href="#section-controlflow" class="toc-link"><span>4. Условия и циклы</span> <span class="active-marker">◀</span></a>
+            <a href="#section-tests" class="toc-link"><span>5. Проверка знаний</span> <span class="active-marker">◀</span></a>
+            <a href="#section-practice-1" class="toc-link"><span>6. Практика: База</span> <span class="active-marker">◀</span></a>
+            <a href="#section-practice-2" class="toc-link"><span>7. Практика: Продвинутая</span> <span class="active-marker">◀</span></a>
+        </nav>
+    </aside>
+
+    <div class="content-wrapper">
+        <header class="content-top">
+            <h1 class="lesson-title">Тема: Основы Python (Расширенный курс)</h1>
+        </header>
+
+        <main class="main-content">
+            <div class="main-header">
+                <h2>Основы языка Python: от типов до функций</h2>
+            </div>
+
+            <section id="section-intro" class="lesson-section">
+                <h3>1. Введение</h3>
+                <p>Python — это высокоуровневый язык программирования общего назначения, ориентированный на повышение производительности разработчика и читаемости кода. Синтаксис ядра Python минималистичен, что делает его отличным выбором для новичков.</p>
+                <p>Ключевая особенность Python — использование отступов (пробелов или табуляций) для выделения блоков кода, в отличие от фигурных скобок в C-подобных языках.</p>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">🐍 Код: Первая программа</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body">
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy">Копировать</button>
+                            <pre><code class="python-code"># Традиционная первая программа
+print("Hello, World!")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <section id="section-datatypes" class="lesson-section">
+                <h3>2. Базовые типы данных</h3>
+                <p>В Python все является объектом. Основные встроенные типы данных включают целые числа, числа с плавающей точкой, строки и логические значения.</p>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">🐍 Код: Примеры типов</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body">
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy">Копировать</button>
+                            <pre><code class="python-code">age = 25          # int (Целое число)
+pi = 3.1415       # float (Число с плавающей точкой)
+name = "Alice"    # str (Строка)
+is_active = True  # bool (Логический тип)
+
+print(type(pi))   # Выведет: <class 'float'></code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">❓ Вопрос-ответ: Типы данных</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body test-body">
+                        <div class="test-question">
+                            <p><strong>Вопрос 1:</strong> Какой тип данных у переменной <code>x = "123"</code>?</p>
+                            <div class="test-options radio-group">
+                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках.Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках."> int</label>
+                                <label><input type="radio" name="dt_q1" data-correct="true" data-feedback="Верно! Любой текст в кавычках — это строка."> str</label>
+                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Неверно."> float</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <section id="section-collections" class="lesson-section">
+                <h3>3. Коллекции (Списки и Словари)</h3>
+                <p>Python предлагает мощные встроенные структуры для хранения множества элементов.</p>
+                <p><strong>Списки (List)</strong> — упорядоченные изменяемые коллекции. Элементы списка можно менять, добавлять и удалять.</p>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">🐍 Код: Списки</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body">
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy">Копировать</button>
+                            <pre><code class="python-code">fruits = ["apple", "banana", "cherry"]
+fruits.append("orange") # Добавление элемента
+print(fruits[0])        # Доступ по индексу (apple)</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <p><strong>Словари (Dictionary)</strong> — коллекции пар «ключ: значение». Отличный выбор, когда нужно быстро находить данные по уникальному ключу.</p>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">🐍 Код: Словари</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body">
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy">Копировать</button>
+                            <pre><code class="python-code">student = {
+    "name": "Bob",
+    "age": 20,
+    "courses": ["Math", "Physics"]
+}
+print(student["name"]) # Выведет: Bob</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <section id="section-controlflow" class="lesson-section">
+                <h3>4. Условия и циклы</h3>
+                <p>Программа редко выполняется строго линейно. Для ветвления логики используется <code>if / elif / else</code>. Для многократного повторения — циклы <code>for</code> и <code>while</code>.</p>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">🐍 Код: Условия и цикл for</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body">
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy">Копировать</button>
+                            <pre><code class="python-code"># Проверка условия
+x = 10
+if x > 5:
+    print("x больше 5")
+else:
+    print("x меньше или равен 5")
+
+# Цикл for по списку
+for num in range(3):
+    print("Итерация номер", num)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <section id="section-tests" class="lesson-section">
+                <h3>5. Проверка знаний (Итоговый тест)</h3>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">❓ Вопрос-ответ: Итоговый тест</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body test-body">
+
+                        <div class="test-question">
+                            <p><strong>Вопрос 1:</strong> Какие из этих структур данных являются изменяемыми (mutable)?</p>
+                            <div class="test-options checkbox-group">
+                                <label><input type="checkbox" data-correct="true" data-feedback="Правильно, список (list) можно изменять."> Списки (List)</label>
+                                <label><input type="checkbox" data-correct="false" data-feedback="Неправильно, кортежи (tuple) неизменяемы."> Кортежи (Tuple)</label>
+                                <label><input type="checkbox" data-correct="true" data-feedback="Правильно, словарь (dict) можно изменять."> Словари (Dict)</label>
+                                <label><input type="checkbox" data-correct="false" data-feedback="Неправильно, строки (str) неизменяемы."> Строки (Str)</label>
+                            </div>
+                        </div>
+
+                        <div class="test-question">
+                            <p><strong>Вопрос 2:</strong> Как называется функция для определения длины списка или строки?</p>
+                            <div class="test-input-group">
+                                <input type="text" data-correct-answer="len" class="test-text-input" placeholder="Введите название функции...">
+                                <button class="check-input-btn" data-feedback="Верно! Функция len() возвращает длину объекта." data-wrong="Неверно. Вспомните английское слово 'length'.">Ответить</button>
+                            </div>
+                            <div class="feedback-area"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <section id="section-practice-1" class="lesson-section self-study">
+                <h3>6. Практика: Базовый уровень</h3>
+                <p>Напишите простую программу, которая присваивает переменной ваше имя и выводит приветствие.</p>
+
+                <!-- Особый блок: Песочница 1 -->
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">💻 Песочница 1: Приветствие</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body sandbox-body">
+                        <div class="sandbox-loader">
+                            <div class="spinner"></div>
+                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
+                        </div>
+                        <div class="sandbox-container" style="display: none;">
+                            <div class="monaco-editor-div" data-code="name = 'Ваше Имя'\nprint('Привет, ' + name + '!')"></div>
+                            <div class="sandbox-controls" style="margin-bottom: 1rem;">
+                                <button class="run-btn">▶ Запустить</button>
+                            </div>
+                            <div class="sandbox-output-wrapper">
+                                <strong>Вывод:</strong>
+                                <pre class="sandbox-output"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <section id="section-practice-2" class="lesson-section self-study">
+                <h3>7. Практика: Продвинутый уровень</h3>
+                <p>Напишите функцию <code>find_max(numbers)</code>, которая принимает список чисел и возвращает самое большое из них без использования встроенной функции <code>max()</code>.</p>
+
+                <!-- Особый блок: Песочница 2 -->
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">💻 Песочница 2: Поиск максимума</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body sandbox-body">
+                        <div class="sandbox-loader">
+                            <div class="spinner"></div>
+                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
+                        </div>
+                        <div class="sandbox-container" style="display: none;">
+                            <div class="monaco-editor-div" data-code="def find_max(numbers):\n    # Ваш код здесь\n    pass\n\n# Тестовый запуск\nprint('Максимум:', find_max([3, 1, 4, 1, 5, 9, 2]))"></div>
+                            <div class="sandbox-controls" style="margin-bottom: 1rem;">
+                                <button class="run-btn">▶ Запустить</button>
+                            </div>
+                            <div class="sandbox-output-wrapper">
+                                <strong>Вывод:</strong>
+                                <pre class="sandbox-output"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs/loader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

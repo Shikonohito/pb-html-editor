@@ -1,0 +1,387 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // ==========================================
+    // 1. Sidebar Toggle Logic
+    // ==========================================
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-sidebar');
+    const fabBtn = document.getElementById('mobile-fab');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const overlay = document.getElementById('overlay');
+
+    function isMobileOrTablet() {
+        return window.innerWidth <= 1024;
+    }
+
+    function toggleSidebar() {
+        if (isMobileOrTablet()) {
+            sidebar.classList.toggle('open');
+            sidebar.classList.remove('closed');
+            overlay.classList.toggle('active');
+        } else {
+            sidebar.classList.toggle('closed');
+            sidebar.classList.remove('open');
+        }
+    }
+
+    if(toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    if(fabBtn) fabBtn.addEventListener('click', toggleSidebar);
+    if(overlay) overlay.addEventListener('click', toggleSidebar);
+
+    tocLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default hash jump
+            
+            if (isMobileOrTablet()) {
+                sidebar.classList.remove('open');
+                if (overlay) overlay.classList.remove('active');
+            }
+            
+            const targetId = link.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection && contentWrapper) {
+                // Calculate position to center the section header
+                const header = targetSection.querySelector('h3');
+                const targetEl = header ? header : targetSection;
+                
+                const wrapperRect = contentWrapper.getBoundingClientRect();
+                const targetRect = targetEl.getBoundingClientRect();
+                
+                // Calculate distance to scroll:
+                // Current scroll position + distance from top of wrapper to target - half wrapper height + half target height
+                const scrollPos = contentWrapper.scrollTop + (targetRect.top - wrapperRect.top) - (wrapperRect.height / 2) + (targetRect.height / 2);
+                
+                contentWrapper.scrollTo({
+                    top: scrollPos,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Update active marker immediately on click
+            tocLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
+
+    // Update TOC active link based on center of screen
+    const contentWrapper = document.querySelector('.content-wrapper');
+    const sections = document.querySelectorAll('.lesson-section');
+    
+    function updateActiveTOC() {
+        if (!contentWrapper || sections.length === 0) return;
+        
+        const wrapperRect = contentWrapper.getBoundingClientRect();
+        // Calculate the center Y coordinate relative to the viewport
+        const centerY = wrapperRect.top + wrapperRect.height / 2;
+        
+        let activeSection = null;
+        
+        // 1. Check which section contains the center point
+        for (let section of sections) {
+            const rect = section.getBoundingClientRect();
+            if (centerY >= rect.top && centerY <= rect.bottom) {
+                activeSection = section;
+                break;
+            }
+        }
+        
+        // 2. If center is in a gap (e.g. over a separator hr), find the closest section
+        if (!activeSection) {
+            let minDistance = Infinity;
+            for (let section of sections) {
+                const rect = section.getBoundingClientRect();
+                const distToTop = Math.abs(centerY - rect.top);
+                const distToBottom = Math.abs(centerY - rect.bottom);
+                const closestDist = Math.min(distToTop, distToBottom);
+                
+                if (closestDist < minDistance) {
+                    minDistance = closestDist;
+                    activeSection = section;
+                }
+            }
+        }
+        
+        if (activeSection) {
+            const id = activeSection.getAttribute('id');
+            let hasChanges = false;
+            
+            tocLinks.forEach(link => {
+                const isActive = link.classList.contains('active');
+                const shouldBeActive = link.getAttribute('href') === `#${id}`;
+                
+                if (shouldBeActive && !isActive) {
+                    link.classList.add('active');
+                    hasChanges = true;
+                } else if (!shouldBeActive && isActive) {
+                    link.classList.remove('active');
+                    hasChanges = true;
+                }
+            });
+        }
+    }
+
+    contentWrapper.addEventListener('scroll', updateActiveTOC, { passive: true });
+    // Initialize active link on load
+    updateActiveTOC();
+
+
+    // ==========================================
+    // 2. Special Blocks Toggle Logic
+    // ==========================================
+    const toggleButtons = document.querySelectorAll('.toggle-block');
+    toggleButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const blockBody = e.target.closest('.special-block').querySelector('.block-body');
+            const isHidden = getComputedStyle(blockBody).display === 'none';
+            if (isHidden) {
+                blockBody.style.display = 'block';
+                e.target.textContent = '▼';
+            } else {
+                blockBody.style.display = 'none';
+                e.target.textContent = '▶';
+            }
+        });
+    });
+
+
+    // ==========================================
+    // 3. Tests Logic
+    // ==========================================
+    
+    function animateFeedbackText(element, text) {
+        element.innerHTML = `<span class="feedback-text-content">${text}</span>`;
+        // Trigger reflow
+        void element.offsetWidth;
+        element.classList.add('show');
+    }
+    
+    // Radio (Один вариант)
+    const radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const label = e.target.closest('label');
+            const isCorrect = e.target.dataset.correct === "true";
+            const feedbackText = e.target.dataset.feedback;
+            
+            // For radio buttons in the same group, we need to hide feedback of others
+            const groupName = e.target.getAttribute('name');
+            const groupRadios = document.querySelectorAll(`input[type="radio"][name="${groupName}"]`);
+            groupRadios.forEach(r => {
+                if (r !== e.target) {
+                    const rLabel = r.closest('label');
+                    const rFeedback = rLabel.nextElementSibling;
+                    if (rFeedback && rFeedback.classList.contains('inline-feedback')) {
+                        rFeedback.classList.remove('show');
+                        // Optional: remove it from DOM after transition, but keeping it is fine
+                    }
+                }
+            });
+
+            let feedbackEl = label.nextElementSibling;
+            if (!feedbackEl || !feedbackEl.classList.contains('inline-feedback')) {
+                feedbackEl = document.createElement('div');
+                feedbackEl.className = 'inline-feedback';
+                label.parentNode.insertBefore(feedbackEl, label.nextSibling);
+            }
+            
+            feedbackEl.className = `inline-feedback feedback-item ${isCorrect ? 'feedback-correct' : 'feedback-wrong'}`;
+            animateFeedbackText(feedbackEl, feedbackText);
+        });
+    });
+
+    // Checkbox (Несколько вариантов)
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', (e) => {
+            const label = e.target.closest('label');
+            const isCorrect = e.target.dataset.correct === "true";
+            const feedbackText = e.target.dataset.feedback;
+            
+            let feedbackEl = label.nextElementSibling;
+            if (!feedbackEl || !feedbackEl.classList.contains('inline-feedback')) {
+                feedbackEl = document.createElement('div');
+                feedbackEl.className = 'inline-feedback';
+                label.parentNode.insertBefore(feedbackEl, label.nextSibling);
+            }
+            
+            if (e.target.checked) {
+                feedbackEl.className = `inline-feedback feedback-item ${isCorrect ? 'feedback-correct' : 'feedback-wrong'}`;
+                animateFeedbackText(feedbackEl, feedbackText);
+            } else {
+                feedbackEl.classList.remove('show');
+            }
+        });
+    });
+
+    // Text Input (Поле ввода)
+    const checkBtns = document.querySelectorAll('.check-input-btn');
+    checkBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const group = e.target.closest('.test-input-group');
+            const input = group.querySelector('.test-text-input');
+            const questionDiv = e.target.closest('.test-question');
+            const feedbackArea = questionDiv.querySelector('.feedback-area');
+            
+            const correctAns = input.dataset.correctAnswer.toLowerCase();
+            const userAns = input.value.trim().toLowerCase();
+            
+            const isCorrect = correctAns === userAns;
+            
+            // "Объяснение всегда одно и то же" -> очищаем старое и показываем новое
+            feedbackArea.innerHTML = ''; 
+            
+            const msg = document.createElement('div');
+            const textContent = isCorrect ? e.target.dataset.feedback : e.target.dataset.wrong;
+            msg.className = `feedback-item ${isCorrect ? 'feedback-correct' : 'feedback-wrong'}`;
+            feedbackArea.appendChild(msg);
+            
+            animateFeedbackText(msg, textContent);
+        });
+    });
+
+
+    // ==========================================
+    // 4. Code Block Syntax Highlight & Copy
+    // ==========================================
+    const codeBlocks = document.querySelectorAll('.python-code');
+    const pythonKeywords = ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'class', 'import', 'from', 'True', 'False', 'None', 'and', 'or', 'not'];
+    const pythonFunctions = ['print', 'len', 'range', 'str', 'int', 'float'];
+
+    codeBlocks.forEach(block => {
+        let code = block.textContent;
+        // Escape HTML
+        code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        
+        // Strings
+        code = code.replace(/(["'])(.*?)\1/g, '<span class="py-string">$&</span>');
+        
+        // Comments
+        code = code.replace(/(#.*)/g, '<span class="py-comment">$1</span>');
+        
+        // Keywords
+        const kwRegex = new RegExp(`\\b(${pythonKeywords.join('|')})\\b`, 'g');
+        code = code.replace(kwRegex, '<span class="py-keyword">$1</span>');
+        
+        // Functions
+        const fnRegex = new RegExp(`\\b(${pythonFunctions.join('|')})\\b(?=\\()`, 'g');
+        code = code.replace(fnRegex, '<span class="py-function">$1</span>');
+        
+        // Numbers
+        code = code.replace(/\b(\d+(\.\d+)?)\b/g, '<span class="py-number">$1</span>');
+
+        block.innerHTML = code;
+    });
+
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    copyBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const container = e.target.closest('.code-container');
+            const codeElem = container.querySelector('code');
+            const code = codeElem.innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = e.target.textContent;
+                e.target.textContent = 'Скопировано';
+                setTimeout(() => {
+                    e.target.textContent = originalText;
+                }, 3000);
+            }).catch(err => {
+                console.error('Ошибка при копировании:', err);
+            });
+        });
+    });
+
+
+    // ==========================================
+    // 5. Sandbox (Monaco + Pyodide) Support Multiple
+    // ==========================================
+    const sandboxInstances = document.querySelectorAll('.sandbox-body');
+    
+    if (sandboxInstances.length > 0 && typeof loadPyodide !== 'undefined' && typeof require !== 'undefined') {
+        let pyodideInstance = null;
+        
+        async function initSandboxes() {
+            try {
+                // Initialize Pyodide once
+                pyodideInstance = await loadPyodide({
+                    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.23.4/full/"
+                });
+                
+                // Initialize Monaco
+                require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs' }});
+                require(['vs/editor/editor.main'], function() {
+                    
+                    sandboxInstances.forEach((sandboxEl, index) => {
+                        const sandboxLoader = sandboxEl.querySelector('.sandbox-loader');
+                        const sandboxContainer = sandboxEl.querySelector('.sandbox-container');
+                        const monacoEditorDiv = sandboxEl.querySelector('.monaco-editor-div');
+                        const runCodeBtn = sandboxEl.querySelector('.run-btn');
+                        const sandboxOutput = sandboxEl.querySelector('.sandbox-output');
+                        
+                        // Use data-code attribute if available, else fallback
+                        let defaultCode = monacoEditorDiv.getAttribute('data-code');
+                        if (!defaultCode) {
+                            defaultCode = "print('Hello World')";
+                        } else {
+                            // Unescape basic html entities just in case
+                            defaultCode = defaultCode.replace(/\\n/g, '\n');
+                        }
+                        
+                        const monacoEditorInstance = monaco.editor.create(monacoEditorDiv, {
+                            value: defaultCode,
+                            language: 'python',
+                            theme: 'vs-dark',
+                            automaticLayout: true,
+                            minimap: { enabled: false },
+                            fontSize: 14,
+                            fontFamily: "'JetBrains Mono', monospace"
+                        });
+                        
+                        // Show editor, hide loader
+                        sandboxLoader.style.display = 'none';
+                        sandboxContainer.style.display = 'block';
+
+                        runCodeBtn.addEventListener('click', async () => {
+                            if (!pyodideInstance) return;
+                            
+                            sandboxOutput.textContent = 'Выполнение...';
+                            sandboxOutput.style.color = '#e0e0e0';
+                            const code = monacoEditorInstance.getValue();
+                            
+                            try {
+                                // Redirect stdout
+                                let output = '';
+                                pyodideInstance.setStdout({ batched: (str) => { output += str + '\\n'; } });
+                                pyodideInstance.setStderr({ batched: (str) => { output += str + '\\n'; } });
+                                
+                                await pyodideInstance.runPythonAsync(code);
+                                
+                                if (output === '') {
+                                    sandboxOutput.textContent = 'Код выполнен успешно (нет вывода)';
+                                    sandboxOutput.style.color = 'var(--color-correct)';
+                                } else {
+                                    sandboxOutput.textContent = output;
+                                }
+                            } catch (err) {
+                                sandboxOutput.textContent = err.toString();
+                                sandboxOutput.style.color = 'var(--color-wrong)';
+                            }
+                        });
+                    });
+                });
+            } catch (err) {
+                sandboxInstances.forEach(sandboxEl => {
+                    const loader = sandboxEl.querySelector('.sandbox-loader');
+                    if (loader) loader.innerHTML = '<p style="color:var(--color-wrong); font-weight: bold;">Ошибка загрузки среды: ' + err.message + '</p>';
+                });
+            }
+        }
+        
+        initSandboxes();
+    } else if (sandboxInstances.length > 0) {
+        sandboxInstances.forEach(sandboxEl => {
+            const loader = sandboxEl.querySelector('.sandbox-loader');
+            if(loader) loader.innerHTML = '<p style="color:var(--color-wrong); font-weight: bold;">Скрипты песочницы не загружены (проверьте интернет-соединение).</p>';
+        });
+    }
+});
