@@ -317,6 +317,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 // Initialize Monaco
+                // TODO(Future): AMD сборка Monaco Editor (require.config, loader.min.js) устарела и будет удалена.
+                // При обновлении версии Monaco Editor необходимо перейти на использование стандартных ES-модулей (ESM).
+                // Пример загрузки: import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@+esm';
                 require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs' }});
                 require(['vs/editor/editor.main'], function() {
                     
@@ -343,37 +346,116 @@ document.addEventListener('DOMContentLoaded', () => {
                             automaticLayout: true,
                             minimap: { enabled: false },
                             fontSize: 14,
-                            fontFamily: "'JetBrains Mono', monospace"
+                            fontFamily: "'JetBrains Mono', monospace",
+                            scrollBeyondLastLine: false
                         });
                         
                         // Show editor, hide loader
                         sandboxLoader.style.display = 'none';
                         sandboxContainer.style.display = 'block';
 
+                        // Auto-resize editor height based on content
+                        const updateEditorHeight = () => {
+                            const contentHeight = monacoEditorInstance.getContentHeight();
+                            monacoEditorDiv.style.height = `${contentHeight + 2}px`; // +2px for top/bottom borders
+                            monacoEditorInstance.layout();
+                        };
+                        
+                        monacoEditorInstance.onDidContentSizeChange(updateEditorHeight);
+                        updateEditorHeight();
+
                         runCodeBtn.addEventListener('click', async () => {
                             if (!pyodideInstance) return;
                             
-                            sandboxOutput.textContent = 'Выполнение...';
+                            sandboxOutput.innerHTML = '';
                             sandboxOutput.style.color = '#e0e0e0';
-                            const code = monacoEditorInstance.getValue();
                             
+                            runCodeBtn.disabled = true;
+                            runCodeBtn.style.opacity = '0.7';
+                            
+                            const code = monacoEditorInstance.getValue();
+                            const namespace = pyodideInstance.globals.get("dict")();
+                            
+                            // 1. Изолируем функцию input для текущей песочницы
+                            namespace.set("__async_input", async (promptText) => {
+                                return new Promise((resolve) => {
+                                    if (promptText) {
+                                        sandboxOutput.appendChild(document.createTextNode(promptText));
+                                    }
+                                    const inputField = document.createElement('input');
+                                    inputField.type = 'text';
+                                    inputField.className = 'sandbox-input-field';
+                                    
+                                    sandboxOutput.appendChild(inputField);
+                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                                    inputField.focus();
+
+                                    inputField.addEventListener('keydown', function(e) {
+                                        if (e.key === 'Enter') {
+                                            const val = inputField.value;
+                                            inputField.remove();
+                                            
+                                            const valSpan = document.createElement('span');
+                                            valSpan.textContent = val + '\n';
+                                            valSpan.style.color = 'var(--color-text-accent)';
+                                            sandboxOutput.appendChild(valSpan);
+                                            sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                                            
+                                            resolve(val);
+                                        }
+                                    });
+                                });
+                            });
+
+                            // 2. Изолируем вывод (print) для текущей песочницы
+                            namespace.set("__js_print", (str) => {
+                                sandboxOutput.appendChild(document.createTextNode(str));
+                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                            });
+
+                            namespace.set("__js_err_print", (str) => {
+                                const span = document.createElement('span');
+                                span.style.color = 'var(--color-wrong)';
+                                span.textContent = str;
+                                sandboxOutput.appendChild(span);
+                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                            });
+
                             try {
-                                // Redirect stdout
-                                let output = '';
-                                pyodideInstance.setStdout({ batched: (str) => { output += str + '\\n'; } });
-                                pyodideInstance.setStderr({ batched: (str) => { output += str + '\\n'; } });
+                                // Переопределяем встроенную функцию print только в локальном неймспейсе
+                                await pyodideInstance.runPythonAsync(`
+import sys
+import builtins
+
+def __custom_print(*args, sep=' ', end='\\n', file=None, flush=False):
+    if file is None or file == getattr(sys, 'stdout', None):
+        __js_print(sep.join(map(str, args)) + end)
+    elif file == getattr(sys, 'stderr', None):
+        __js_err_print(sep.join(map(str, args)) + end)
+    else:
+        builtins.print(*args, sep=sep, end=end, file=file, flush=flush)
+
+print = __custom_print
+                                `, { globals: namespace });
+
+                                const asyncCode = code.replace(/(^|[^\w\.])input\s*\(/g, '$1await __async_input(');
                                 
-                                await pyodideInstance.runPythonAsync(code);
+                                await pyodideInstance.runPythonAsync(asyncCode, { globals: namespace });
                                 
-                                if (output === '') {
+                                if (sandboxOutput.childNodes.length === 0) {
                                     sandboxOutput.textContent = 'Код выполнен успешно (нет вывода)';
                                     sandboxOutput.style.color = 'var(--color-correct)';
-                                } else {
-                                    sandboxOutput.textContent = output;
                                 }
                             } catch (err) {
-                                sandboxOutput.textContent = err.toString();
-                                sandboxOutput.style.color = 'var(--color-wrong)';
+                                const span = document.createElement('span');
+                                span.style.color = 'var(--color-wrong)';
+                                span.textContent = err.toString() + '\n';
+                                sandboxOutput.appendChild(span);
+                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                            } finally {
+                                namespace.destroy();
+                                runCodeBtn.disabled = false;
+                                runCodeBtn.style.opacity = '1';
                             }
                         });
                     });
