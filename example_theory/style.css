@@ -242,7 +242,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 101;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .lesson-title {
@@ -641,7 +641,7 @@ body {
 
 /* Tablet & Landscape Mobile */
 @media (max-width: 1024px) {
-    .mobile-menu-btn {
+    .mobile-fab {
         display: flex;
     }
 
@@ -659,10 +659,6 @@ body {
 
 /* Portrait Mobile */
 @media (max-width: 768px) {
-    .mobile-fab {
-        display: flex;
-    }
-
     .sidebar-top {
         display: none;
     }
