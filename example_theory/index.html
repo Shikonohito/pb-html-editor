@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Продвинутый теоретический урок</title>
+    <title>Краткий заголовок для браузера</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,214 +24,226 @@
             <span>Содержание</span>
         </div>
         <nav class="sidebar-toc">
-            <a href="#section-intro" class="toc-link active"><span>1. Введение</span> <span class="active-marker">◀</span></a>
-            <a href="#section-datatypes" class="toc-link"><span>2. Базовые типы данных</span> <span class="active-marker">◀</span></a>
-            <a href="#section-collections" class="toc-link"><span>3. Коллекции</span> <span class="active-marker">◀</span></a>
-            <a href="#section-controlflow" class="toc-link"><span>4. Условия и циклы</span> <span class="active-marker">◀</span></a>
-            <a href="#section-tests" class="toc-link"><span>5. Проверка знаний</span> <span class="active-marker">◀</span></a>
-            <a href="#section-practice-1" class="toc-link"><span>6. Практика: База</span> <span class="active-marker">◀</span></a>
-            <a href="#section-practice-2" class="toc-link"><span>7. Практика: Продвинутая</span> <span class="active-marker">◀</span></a>
+            <a href="#section-main-1" class="toc-link active"><span>Ручной дубликат заголовка первого раздела</span> <span class="active-marker">◀</span></a>
+            <a href="#section-main-2" class="toc-link"><span>Ручной дубликат заголовка второго раздела</span> <span class="active-marker">◀</span></a>
+            <a href="#section-self-study-1" class="toc-link"><span>Ручной дубликат заголовка первого раздела из части самостоятельного изучения</span> <span class="active-marker">◀</span></a>
+            <a href="#section-self-study-2" class="toc-link"><span>Ручной дубликат заголовка второго раздела из части самостоятельного изучения</span> <span class="active-marker">◀</span></a>
         </nav>
     </aside>
 
     <div class="content-wrapper">
         <header class="content-top">
-            <h1 class="lesson-title">Тема: Основы Python (Расширенный курс)</h1>
+            <h1 class="lesson-title">Главный заголовок теоретического файла в верхнем левом углу</h1>
         </header>
 
         <main class="main-content">
             <div class="main-header">
-                <h2>Основы языка Python: от типов до функций</h2>
+                <h2>Главный заголовок теоретического файла</h2>
             </div>
 
-            <section id="section-intro" class="lesson-section">
-                <h3>1. Введение</h3>
-                <p>Python — это высокоуровневый язык программирования общего назначения, ориентированный на повышение производительности разработчика и читаемости кода. Синтаксис ядра Python минималистичен, что делает его отличным выбором для новичков.</p>
-                <p>Ключевая особенность Python — использование отступов (пробелов или табуляций) для выделения блоков кода, в отличие от фигурных скобок в C-подобных языках.</p>
+            <section id="section-main-1" class="lesson-section">
+                <h3>Заголовок первого раздела</h3>
+                <p>Параграф, который содержит некоторое описание текущего раздела.</p>
+                <p>Разделы могут содержать несколько параграфов.</p>
+                <p>Разделов может быть несколько, но не могут быть вложенными.</p>
+                <p>Разделы идут друг за другом, имеют разделитель, который визуально отделяет их друг от друга.</p>
+                <p>Разделы могут содержать разные блоки. Блоки могут содержать заголовок и тело. Тело может быть универсальным или специализированным блоком. Тело может содержать такой же блок по структуре, в котором он находится.</p>
 
                 <div class="special-block">
                     <div class="block-header">
-                        <span class="block-title">🐍 Код: Первая программа</span>
+                        <span class="block-title">⚙️ Заголовок блока с кодом только для копирования</span>
                         <button class="toggle-block">▼</button>
                     </div>
                     <div class="block-body">
+                        <p>Данный блок содержит контейнер с кодом, который можно скопировать, нажав кнопку в правой верхней части контейнера.</p>
+
                         <div class="code-container">
                             <button class="copy-btn" title="Copy">Копировать</button>
-                            <pre><code class="python-code"># Традиционная первая программа
-print("Hello, World!")</code></pre>
+                            <pre><code>print("Hello, World!")</code></pre>
+                        </div>
+
+                        <p>В данном блоке может быть 0 и более параграфов.</p>
+
+                        <div class="special-block">
+                            <div class="block-header">
+                                <span class="block-title">⚙️ Заголовок вложенного блока</span>
+                                <button class="toggle-block">▼</button>
+                            </div>
+                            <div class="block-body">
+                                <p>Вложенность не должна превышать 2 уровня, так как усложнятся читаемость.</p>
+
+                                <div class="code-container">
+                                    <button class="copy-btn" title="Copy">Копировать</button>
+                                    <pre><code>print("Hello, World!")</code></pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <p>Параграфы могут быть между блоками.</p>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">⚙️ Заголовок блока с кодом для копирования и запуска</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body">
+                        <p>Данный блок содержит контейнер с кодом, который можно скопировать, нажав кнопку в правой верхней части контейнера. Также он содержит кнопку "Запустить" для выполнения кода. Результат выполнения отображается ниже, после кода.</p>
+
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy">Копировать</button>
+                            <pre><code>print("Hello, World!")</code></pre>
+                        </div>
+
+                        <p>В данном блоке может быть 0 и более параграфов.</p>
+                    </div>
+                </div>
+
+                <p>Параграфы могут быть после блоков.</p>
+
             </section>
 
             <hr class="section-divider">
 
-            <section id="section-datatypes" class="lesson-section">
-                <h3>2. Базовые типы данных</h3>
-                <p>В Python все является объектом. Основные встроенные типы данных включают целые числа, числа с плавающей точкой, строки и логические значения.</p>
+            <section id="section-main-2" class="lesson-section">
+                <h3>Заголовок второго раздела</h3>
+
+                <p>Варианты блоков указаны ниже.</p>
+                <p>В заголовках блоков может быть эмодзи, который даёт некоторую визуальную подсказку, про что этот блок.</p>
 
                 <div class="special-block">
                     <div class="block-header">
-                        <span class="block-title">🐍 Код: Примеры типов</span>
+                        <span class="block-title">⚙️ Заголовок универсального блока</span>
                         <button class="toggle-block">▼</button>
                     </div>
                     <div class="block-body">
+                        <p>В заголовках этого блока могут быть эмодзи:
+                            <ul>
+                                <li>📚 - означает определение термина.</li>
+                                <li>⚙️ - означает объяснение алгоритма/кода/идеи/процесса.</li>
+                                <li>⚠️ - означает предупреждение.</li>
+                                <li>💡 - означает подсказка.</li>
+                                <li>✅ - означает верный подход.</li>
+                                <li>❌ - означает неверный подход.</li>
+                            </ul>
+                        </p>
+
+                        <p>Тело может содержать 0 и более параграфов.</p>
+
+                        <p>Тело может содержать блоки с кодом только для чтения:</p>
+
                         <div class="code-container">
                             <button class="copy-btn" title="Copy">Копировать</button>
-                            <pre><code class="python-code">age = 25          # int (Целое число)
+                            <pre><code>age = 25          # int (Целое число)
 pi = 3.1415       # float (Число с плавающей точкой)
 name = "Alice"    # str (Строка)
-is_active = True  # bool (Логический тип)
+is_active = True  # bool (Логический тип)</code></pre>
+                        </div>
 
-print(type(pi))   # Выведет: <class 'float'></code></pre>
+                        <p>Тело может содержать блоки с кодом для чтения и запуска, но без возможности изменения кода:</p>
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy">Копировать</button>
+                            <pre><code>name = input("Введите ваше имя: ")
+print(name)
+age = int(input("Ваш возраст:"))
+print(age)</code></pre>
+                        </div>
+
+                        <p>Тело может содержать вложенные блоки, но не более 2 уровня вложенности.</p>
+                        <div class="special-block">
+                            <div class="block-header">
+                                <span class="block-title">⚠️ Заголовок вложенного блока</span>
+                                <button class="toggle-block">▼</button>
+                            </div>
+                            <div class="block-body">
+                                <p>Вложенность не должна превышать 2 уровня, так как усложнятся читаемость.</p>
+
+                                <div class="code-container">
+                                    <button class="copy-btn" title="Copy">Копировать</button>
+                                    <pre><code>print("Hello, World!")</code></pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="special-block">
                     <div class="block-header">
-                        <span class="block-title">❓ Вопрос-ответ: Типы данных</span>
+                        <span class="block-title">❓ Заголовок блока с вопросом и единственным верным ответом</span>
                         <button class="toggle-block">▼</button>
                     </div>
                     <div class="block-body test-body">
                         <div class="test-question">
-                            <p><strong>Вопрос 1:</strong> Какой тип данных у переменной <code>x = "123"</code>?</p>
+                            <p>Заголовок начинается с эмодзи ❓.</p>
+                            <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с вопросом.</p>
+
+                            <p>Может содержать вопрос с единственным верным вариантом ответа (радио-кнопки). При нажатии на вариант сразу же появляется фидбэк о том, почему ответ верный или неверный. Открытый фидбэк скрывается, если выбран другой вариант.</p>
                             <div class="test-options radio-group">
-                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках.Неверно. Несмотря на цифры, значение находится в кавычках. Неверно. Несмотря на цифры, значение находится в кавычках."> int</label>
-                                <label><input type="radio" name="dt_q1" data-correct="true" data-feedback="Верно! Любой текст в кавычках — это строка."> str</label>
-                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Неверно."> float</label>
+                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Первый вариант</label>
+                                <label><input type="radio" name="dt_q1" data-correct="true" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он зелёный, если верный.">Второй вариант</label>
+                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Третий вариант</label>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <hr class="section-divider">
-
-            <section id="section-collections" class="lesson-section">
-                <h3>3. Коллекции (Списки и Словари)</h3>
-                <p>Python предлагает мощные встроенные структуры для хранения множества элементов.</p>
-                <p><strong>Списки (List)</strong> — упорядоченные изменяемые коллекции. Элементы списка можно менять, добавлять и удалять.</p>
 
                 <div class="special-block">
                     <div class="block-header">
-                        <span class="block-title">🐍 Код: Списки</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body">
-                        <div class="code-container">
-                            <button class="copy-btn" title="Copy">Копировать</button>
-                            <pre><code class="python-code">fruits = ["apple", "banana", "cherry"]
-fruits.append("orange") # Добавление элемента
-print(fruits[0])        # Доступ по индексу (apple)</code></pre>
-                        </div>
-                    </div>
-                </div>
-
-                <p><strong>Словари (Dictionary)</strong> — коллекции пар «ключ: значение». Отличный выбор, когда нужно быстро находить данные по уникальному ключу.</p>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">🐍 Код: Словари</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body">
-                        <div class="code-container">
-                            <button class="copy-btn" title="Copy">Копировать</button>
-                            <pre><code class="python-code">student = {
-    "name": "Bob",
-    "age": 20,
-    "courses": ["Math", "Physics"]
-}
-print(student["name"]) # Выведет: Bob</code></pre>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="section-divider">
-
-            <section id="section-controlflow" class="lesson-section">
-                <h3>4. Условия и циклы</h3>
-                <p>Программа редко выполняется строго линейно. Для ветвления логики используется <code>if / elif / else</code>. Для многократного повторения — циклы <code>for</code> и <code>while</code>.</p>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">🐍 Код: Условия и цикл for</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body">
-                        <div class="code-container">
-                            <button class="copy-btn" title="Copy">Копировать</button>
-                            <pre><code class="python-code"># Проверка условия
-x = 10
-if x > 5:
-    print("x больше 5")
-else:
-    print("x меньше или равен 5")
-
-# Цикл for по списку
-for num in range(3):
-    print("Итерация номер", num)</code></pre>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="section-divider">
-
-            <section id="section-tests" class="lesson-section">
-                <h3>5. Проверка знаний (Итоговый тест)</h3>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">❓ Вопрос-ответ: Итоговый тест</span>
+                        <span class="block-title">❓ Заголовок блока с вопросом и несколькими верными ответами</span>
                         <button class="toggle-block">▼</button>
                     </div>
                     <div class="block-body test-body">
-
                         <div class="test-question">
-                            <p><strong>Вопрос 1:</strong> Какие из этих структур данных являются изменяемыми (mutable)?</p>
+                            <p>Заголовок начинается с эмодзи ❓.</p>
+                            <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с вопросом.</p>
+
+                            <p>Может содержать вопрос с несколькими верными вариантами ответ (чекбокс). При нажатии на вариант сразу же появляется фидбэк о том, почему ответ верный или неверный. Открытый фидбэк остаётся открытым, если выбран другой вариант, и скрывается только в том случае, если с варианта убирается галочка.</p>
                             <div class="test-options checkbox-group">
-                                <label><input type="checkbox" data-correct="true" data-feedback="Правильно, список (list) можно изменять."> Списки (List)</label>
-                                <label><input type="checkbox" data-correct="false" data-feedback="Неправильно, кортежи (tuple) неизменяемы."> Кортежи (Tuple)</label>
-                                <label><input type="checkbox" data-correct="true" data-feedback="Правильно, словарь (dict) можно изменять."> Словари (Dict)</label>
-                                <label><input type="checkbox" data-correct="false" data-feedback="Неправильно, строки (str) неизменяемы."> Строки (Str)</label>
+                                <label><input type="checkbox" data-correct="true" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он зелёный, если верный.">Первый вариант</label>
+                                <label><input type="checkbox" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Второй вариант</label>
+                                <label><input type="checkbox" data-correct="true" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он зелёный, если верный.">Третий вариант</label>
+                                <label><input type="checkbox" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Четвертый вариант</label>
                             </div>
                         </div>
+                    </div>
+                </div>
 
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">❓ Заголовок блока с открытым вопросом</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body test-body">
                         <div class="test-question">
-                            <p><strong>Вопрос 2:</strong> Как называется функция для определения длины списка или строки?</p>
+                            <p>Заголовок начинается с эмодзи ❓.</p>
+                            <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с вопросом.</p>
+
+                            <p>Может содержать вопрос, поле для ввода ответа и кнопку "Ответить". При нажатии на кнопку появляется фидбэк. Если ответ неверный, то фидбэк покажет, что ответ неверный, и может содержать подсказку к верному ответу. Если же ответ верный, то фидбэк покажет, что ответ верный, и может содержать дополнительные объяснения к верному ответу. Проверяется точное совпадение, символ в символ.</p>
                             <div class="test-input-group">
-                                <input type="text" data-correct-answer="len" class="test-text-input" placeholder="Введите название функции...">
-                                <button class="check-input-btn" data-feedback="Верно! Функция len() возвращает длину объекта." data-wrong="Неверно. Вспомните английское слово 'length'.">Ответить</button>
+                                <input type="text" data-correct-answer="Верный ответ" class="test-text-input" placeholder="Введите ответ...">
+                                <button class="check-input-btn" data-feedback="Здесь указывается текст, который должен появиться, когда введён верный ответ." data-wrong="Здесь указывается текст, который должен появиться, когда введён неверный ответ.">Ответить</button>
                             </div>
                             <div class="feedback-area"></div>
                         </div>
-
                     </div>
                 </div>
-            </section>
 
-            <hr class="section-divider">
-
-            <section id="section-practice-1" class="lesson-section self-study">
-                <h3>6. Практика: Базовый уровень</h3>
-                <p>Напишите простую программу, которая присваивает переменной ваше имя и выводит приветствие.</p>
-
-                <!-- Особый блок: Песочница 1 -->
                 <div class="special-block">
                     <div class="block-header">
-                        <span class="block-title">💻 Песочница 1: Приветствие</span>
+                        <span class="block-title">💻 Заголовок блока с песочницей</span>
                         <button class="toggle-block">▼</button>
                     </div>
                     <div class="block-body sandbox-body">
+                        <p>Заголовок начинается с эмодзи 💻.</p>
+                        <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с кодом.</p>
+
                         <div class="sandbox-loader">
                             <div class="spinner"></div>
                             <p>Инициализация среды Python. Пожалуйста, подождите...</p>
                         </div>
                         <div class="sandbox-container" style="display: none;">
-                            <div class="monaco-editor-div" data-code="name = 'Ваше Имя'\nprint('Привет, ' + name + '!')"></div>
+                            <div class="monaco-editor-div" data-code="# Здесь указывается предустановленный код\n# Который будет выполнен при запуске песочницы"></div>
                             <div class="sandbox-controls" style="margin-bottom: 1rem;">
                                 <button class="run-btn">▶ Запустить</button>
                             </div>
@@ -246,35 +258,22 @@ for num in range(3):
 
             <hr class="section-divider">
 
-            <section id="section-practice-2" class="lesson-section self-study">
-                <h3>7. Практика: Продвинутый уровень</h3>
-                <p>Напишите функцию <code>find_max(numbers)</code>, которая принимает список чисел и возвращает самое большое из них без использования встроенной функции <code>max()</code>.</p>
+            <div class="main-header">
+                <h2>Заголовок части теоретического файла для самостоятельного изучения</h2>
+            </div>
 
-                <!-- Особый блок: Песочница 2 -->
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">💻 Песочница 2: Поиск максимума</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body sandbox-body">
-                        <div class="sandbox-loader">
-                            <div class="spinner"></div>
-                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
-                        </div>
-                        <div class="sandbox-container" style="display: none;">
-                            <div class="monaco-editor-div" data-code="def find_max(numbers):\n    # Ваш код здесь\n    pass\n\n# Тестовый запуск\nprint('Максимум:', find_max([3, 1, 4, 1, 5, 9, 2]))"></div>
-                            <div class="sandbox-controls" style="margin-bottom: 1rem;">
-                                <button class="run-btn">▶ Запустить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Вывод:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <section id="section-self-study-1" class="lesson-section">
+                <h3>Заголовок первого раздела части самостоятельного изучения</h3>
+                <p>После главной части в самом конце может быть часть самостоятельного изучения, которое строится по тому же принципу, что и главная часть.</p>
             </section>
 
+            <hr class="section-divider">
+
+            <section id="section-self-study-2" class="lesson-section">
+                <h3>Заголовок второго раздела части самостоятельного изучения</h3>
+                <p>Строится по тому же принципу, что и главная часть.</p>
+            </section>
         </main>
     </div>
 
