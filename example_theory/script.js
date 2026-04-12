@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const targetRect = targetEl.getBoundingClientRect();
 
                 // Calculate distance to scroll:
-                // Current scroll position + distance from top of wrapper to target - half wrapper height + half target height
-                const scrollPos = contentWrapper.scrollTop + (targetRect.top - wrapperRect.top) - (wrapperRect.height / 2) + (targetRect.height / 2);
+                // Current scroll position + distance from top of wrapper to target - quarter wrapper height + half target height
+                const scrollPos = contentWrapper.scrollTop + (targetRect.top - wrapperRect.top) - (wrapperRect.height / 4) + (targetRect.height / 2);
 
                 contentWrapper.scrollTo({
                     top: scrollPos,
@@ -281,18 +281,19 @@ document.addEventListener('DOMContentLoaded', () => {
         block.innerHTML = code;
     });
 
-    const copyBtns = document.querySelectorAll('.copy-btn');
+    const copyBtns = document.querySelectorAll('.copy-btn:not(.copy-sandbox-btn)');
     copyBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const container = e.target.closest('.code-container');
+            const button = e.currentTarget;
+            const container = button.closest('.code-container');
             const codeElem = container.querySelector('code');
             const code = codeElem.innerText;
 
             navigator.clipboard.writeText(code).then(() => {
-                const originalText = e.target.textContent;
-                e.target.textContent = 'Скопировано';
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M15.188 5.11a.5.5 0 0 1 .752.626l-.056.084-7.5 9a.5.5 0 0 1-.738.033l-3.5-3.5-.064-.078a.501.501 0 0 1 .693-.693l.078.064 3.113 3.113 7.15-8.58z"/></svg>';
                 setTimeout(() => {
-                    e.target.textContent = originalText;
+                    button.innerHTML = originalHTML;
                 }, 3000);
             }).catch(err => {
                 console.error('Ошибка при копировании:', err);
@@ -302,11 +303,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // 5. Sandbox (Monaco + Pyodide) Support Multiple
+    // 5. Sandbox (Monaco + Pyodide) Support Multiple & Runnable Code Blocks
     // ==========================================
     const sandboxInstances = document.querySelectorAll('.sandbox-body');
+    const runnableCodeBlocks = document.querySelectorAll('.runnable-code');
 
-    if (sandboxInstances.length > 0 && typeof loadPyodide !== 'undefined' && typeof require !== 'undefined') {
+    if ((sandboxInstances.length > 0 || runnableCodeBlocks.length > 0) && typeof loadPyodide !== 'undefined' && typeof require !== 'undefined') {
         let pyodideInstance = null;
 
         async function initSandboxes() {
@@ -329,6 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const monacoEditorDiv = sandboxEl.querySelector('.monaco-editor-div');
                         const runCodeBtn = sandboxEl.querySelector('.run-btn');
                         const sandboxOutput = sandboxEl.querySelector('.sandbox-output');
+                        const copySandboxBtn = sandboxEl.querySelector('.copy-sandbox-btn');
 
                         // Use data-code attribute if available, else fallback
                         let defaultCode = monacoEditorDiv.getAttribute('data-code');
@@ -347,7 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             minimap: { enabled: false },
                             fontSize: 14,
                             fontFamily: "'JetBrains Mono', monospace",
-                            scrollBeyondLastLine: false
+                            scrollBeyondLastLine: false,
+                            padding: { top: 16, bottom: 16 }
                         });
 
                         // Show editor, hide loader
@@ -363,6 +367,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         monacoEditorInstance.onDidContentSizeChange(updateEditorHeight);
                         updateEditorHeight();
+
+                        if (copySandboxBtn) {
+                            copySandboxBtn.addEventListener('click', () => {
+                                const code = monacoEditorInstance.getValue();
+                                navigator.clipboard.writeText(code).then(() => {
+                                    const originalHTML = copySandboxBtn.innerHTML;
+                                    copySandboxBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M15.188 5.11a.5.5 0 0 1 .752.626l-.056.084-7.5 9a.5.5 0 0 1-.738.033l-3.5-3.5-.064-.078a.501.501 0 0 1 .693-.693l.078.064 3.113 3.113 7.15-8.58z"/></svg>';
+                                    setTimeout(() => {
+                                        copySandboxBtn.innerHTML = originalHTML;
+                                    }, 3000);
+                                }).catch(err => {
+                                    console.error('Ошибка при копировании:', err);
+                                });
+                            });
+                        }
 
                         runCodeBtn.addEventListener('click', async () => {
                             if (!pyodideInstance) return;
@@ -443,8 +462,8 @@ print = __custom_print
                                 await pyodideInstance.runPythonAsync(asyncCode, { globals: namespace });
 
                                 if (sandboxOutput.childNodes.length === 0) {
-                                    sandboxOutput.textContent = 'Код выполнен успешно (нет вывода)';
-                                    sandboxOutput.style.color = 'var(--color-correct)';
+                                    sandboxOutput.textContent = 'No output';
+                                    sandboxOutput.style.color = '#e0e0e0';
                                 }
                             } catch (err) {
                                 const span = document.createElement('span');
@@ -459,20 +478,132 @@ print = __custom_print
                             }
                         });
                     });
+                    
+                    // Initialize Runnable Code Blocks
+                    runnableCodeBlocks.forEach((blockEl) => {
+                        const codeElem = blockEl.querySelector('code');
+                        const runCodeBtn = blockEl.querySelector('.run-btn');
+                        const sandboxOutputWrapper = blockEl.querySelector('.sandbox-output-wrapper');
+                        const sandboxOutput = blockEl.querySelector('.sandbox-output');
+                        
+                        // Only add event listener if we have a run button
+                        if (runCodeBtn && codeElem) {
+                            runCodeBtn.addEventListener('click', async () => {
+                                if (!pyodideInstance) return;
+
+                                // Show the output wrapper when clicked
+                                sandboxOutputWrapper.style.display = 'block';
+
+                                sandboxOutput.innerHTML = '';
+                                sandboxOutput.style.color = '#e0e0e0';
+
+                                runCodeBtn.disabled = true;
+                                runCodeBtn.style.opacity = '0.7';
+
+                                // Extract raw text content without HTML tags (for syntax highlighting)
+                                const code = codeElem.innerText;
+                                const namespace = pyodideInstance.globals.get("dict")();
+
+                                // 1. Изолируем функцию input
+                                namespace.set("__async_input", async (promptText) => {
+                                    return new Promise((resolve) => {
+                                        if (promptText) {
+                                            sandboxOutput.appendChild(document.createTextNode(promptText));
+                                        }
+                                        const inputField = document.createElement('input');
+                                        inputField.type = 'text';
+                                        inputField.className = 'sandbox-input-field';
+
+                                        sandboxOutput.appendChild(inputField);
+                                        sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                                        inputField.focus();
+
+                                        inputField.addEventListener('keydown', function(e) {
+                                            if (e.key === 'Enter') {
+                                                const val = inputField.value;
+                                                inputField.remove();
+
+                                                const valSpan = document.createElement('span');
+                                                valSpan.textContent = val + '\n';
+                                                valSpan.style.color = 'var(--color-text-accent)';
+                                                sandboxOutput.appendChild(valSpan);
+                                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+
+                                                resolve(val);
+                                            }
+                                        });
+                                    });
+                                });
+
+                                // 2. Изолируем вывод (print)
+                                namespace.set("__js_print", (str) => {
+                                    sandboxOutput.appendChild(document.createTextNode(str));
+                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                                });
+
+                                namespace.set("__js_err_print", (str) => {
+                                    const span = document.createElement('span');
+                                    span.style.color = 'var(--color-wrong)';
+                                    span.textContent = str;
+                                    sandboxOutput.appendChild(span);
+                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                                });
+
+                                try {
+                                    // Переопределяем встроенную функцию print только в локальном неймспейсе
+                                    await pyodideInstance.runPythonAsync(`
+import sys
+import builtins
+
+def __custom_print(*args, sep=' ', end='\\n', file=None, flush=False):
+    if file is None or file == getattr(sys, 'stdout', None):
+        __js_print(sep.join(map(str, args)) + end)
+    elif file == getattr(sys, 'stderr', None):
+        __js_err_print(sep.join(map(str, args)) + end)
+    else:
+        builtins.print(*args, sep=sep, end=end, file=file, flush=flush)
+
+print = __custom_print
+                                    `, { globals: namespace });
+
+                                    const asyncCode = code.replace(/(^|[^\w\.])input\s*\(/g, '$1await __async_input(');
+
+                                    await pyodideInstance.runPythonAsync(asyncCode, { globals: namespace });
+
+                                    if (sandboxOutput.childNodes.length === 0) {
+                                        sandboxOutput.textContent = 'No output';
+                                        sandboxOutput.style.color = '#e0e0e0';
+                                    }
+                                } catch (err) {
+                                    const span = document.createElement('span');
+                                    span.style.color = 'var(--color-wrong)';
+                                    span.textContent = err.toString() + '\n';
+                                    sandboxOutput.appendChild(span);
+                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                                } finally {
+                                    namespace.destroy();
+                                    runCodeBtn.disabled = false;
+                                    runCodeBtn.style.opacity = '1';
+                                }
+                            });
+                        }
+                    });
                 });
             } catch (err) {
                 sandboxInstances.forEach(sandboxEl => {
                     const loader = sandboxEl.querySelector('.sandbox-loader');
                     if (loader) loader.innerHTML = '<p style="color:var(--color-wrong); font-weight: bold;">Ошибка загрузки среды: ' + err.message + '</p>';
                 });
+                console.error("Pyodide Load Error", err);
             }
         }
 
         initSandboxes();
-    } else if (sandboxInstances.length > 0) {
+    } else if (sandboxInstances.length > 0 || runnableCodeBlocks.length > 0) {
         sandboxInstances.forEach(sandboxEl => {
             const loader = sandboxEl.querySelector('.sandbox-loader');
             if(loader) loader.innerHTML = '<p style="color:var(--color-wrong); font-weight: bold;">Скрипты песочницы не загружены (проверьте интернет-соединение).</p>';
         });
+        console.warn("Pyodide could not be loaded or is not defined.");
     }
 });
