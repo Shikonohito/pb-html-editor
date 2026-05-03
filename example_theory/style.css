@@ -652,6 +652,23 @@ body {
     background-color: #288b28;
 }
 
+.check-btn {
+    padding: 0.6rem 1.2rem;
+    background-color: #0a5a95;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.check-btn:hover {
+    background-color: #0b68ad;
+}
+
 .sandbox-output {
     background-color: var(--color-code-bg);
     color: #e0e0e0;
