@@ -654,7 +654,7 @@ body {
 
 .check-btn {
     padding: 0.6rem 1.2rem;
-    background-color: #0a5a95;
+    background-color: #54ad54;
     color: #fff;
     border: none;
     border-radius: 0.25rem;
@@ -666,7 +666,7 @@ body {
 }
 
 .check-btn:hover {
-    background-color: #0b68ad;
+    background-color: #288b28;
 }
 
 .sandbox-output {
@@ -746,10 +746,6 @@ body {
 
 /* Portrait Mobile */
 @media (max-width: 768px) {
-    .sidebar-top {
-        display: none;
-    }
-
     .sidebar {
         width: 80vw;
     }
