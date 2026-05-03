@@ -375,6 +375,143 @@ def __transform_and_run(code_str):
             }
         }
 
+        async function executeTestsCode(code, testCases, sandboxOutput, checkCodeBtn) {
+            if (!pyodideInstance) return;
+
+            sandboxOutput.innerHTML = '';
+            sandboxOutput.style.color = '#e0e0e0';
+
+            checkCodeBtn.disabled = true;
+            checkCodeBtn.style.opacity = '0.7';
+
+            let allPassed = true;
+
+            const namespace = pyodideInstance.globals.get("dict")();
+
+            try {
+                await pyodideInstance.runPythonAsync(`
+import sys
+import builtins
+
+class TestRunner:
+    def __init__(self):
+        self.inputs = []
+        self.outputs = []
+        
+    def mock_input(self, prompt=""):
+        if not self.inputs:
+            raise EOFError("Программа запросила больше данных, чем было предоставлено (input был вызван больше раз, чем было строк во входных данных).")
+        return self.inputs.pop(0)
+        
+    def mock_print(self, *args, sep=' ', end='\\n', file=None, flush=False):
+        if file is None or file == getattr(sys, 'stdout', None):
+            self.outputs.append(sep.join(map(str, args)) + end)
+        else:
+            builtins.print(*args, sep=sep, end=end, file=file, flush=flush)
+
+runner = TestRunner()
+
+def run_test_case(code_str, inputs_list):
+    runner.inputs = list(inputs_list)
+    runner.outputs = []
+    
+    test_globals = {
+        '__builtins__': dict(builtins.__dict__),
+        'print': runner.mock_print,
+        'input': runner.mock_input
+    }
+    
+    try:
+        exec(code_str, test_globals)
+    except Exception as e:
+        import traceback
+        if isinstance(e, EOFError) and "Программа запросила больше данных" in str(e):
+             raise RuntimeError(str(e))
+        lines = traceback.format_exception(type(e), e, e.__traceback__)
+        # Filter out traceback lines from our test runner
+        filtered_lines = [line for line in lines if "File \\"<string>\\"" in line or not line.startswith("  File ")]
+        raise RuntimeError("".join(filtered_lines))
+        
+    if runner.inputs:
+        raise RuntimeError("Программа прочитала не все входные данные (input был вызван меньше раз, чем было строк во входных данных).")
+    
+    return "".join(runner.outputs)
+                `, { globals: namespace });
+
+                const run_test_case = namespace.get("run_test_case");
+
+                for (let i = 0; i < testCases.length; i++) {
+                    const testCase = testCases[i];
+                    
+                    const inputsList = testCase.input.replace(/\r/g, '').split('\n');
+                    if (inputsList.length > 0 && inputsList[inputsList.length - 1] === '') {
+                        inputsList.pop(); 
+                    }
+
+                    let actualOutput;
+                    try {
+                        const pyInputsList = pyodideInstance.toPy(inputsList);
+                        actualOutput = run_test_case(code, pyInputsList);
+                        pyInputsList.destroy();
+                    } catch (err) {
+                        const span = document.createElement('span');
+                        span.style.color = 'var(--color-wrong)';
+                        
+                        let errorMsg = err.toString();
+                        // clean up pyodide specific error wrappings if it's our custom RuntimeError
+                        if (errorMsg.includes("RuntimeError: Программа запросила больше данных")) {
+                            errorMsg = "Программа запросила больше данных, чем было предоставлено (input был вызван больше раз, чем было строк во входных данных).";
+                        } else if (errorMsg.includes("RuntimeError: Программа прочитала не все входные данные")) {
+                            errorMsg = "Программа прочитала не все входные данные (input был вызван меньше раз, чем было строк во входных данных).";
+                        }
+                        
+                        span.textContent = `Тест ${i + 1} завершился с ошибкой:\n${errorMsg}\n\n`;
+                        sandboxOutput.appendChild(span);
+                        allPassed = false;
+                        break;
+                    }
+
+                    const expectedOutput = testCase.output.replace(/\r/g, '').trimEnd();
+                    const actualTrimmed = actualOutput.trimEnd();
+
+                    if (actualTrimmed !== expectedOutput) {
+                        const span = document.createElement('span');
+                        span.style.color = 'var(--color-wrong)';
+                        span.textContent = `Тест ${i + 1} провален.\nОжидалось:\n${expectedOutput}\nПолучено:\n${actualTrimmed}\n\n`;
+                        sandboxOutput.appendChild(span);
+                        allPassed = false;
+                        break;
+                    } else {
+                        const span = document.createElement('span');
+                        span.style.color = 'var(--color-correct)';
+                        span.textContent = `Тест ${i + 1} пройден.\n`;
+                        sandboxOutput.appendChild(span);
+                    }
+                }
+
+                if (allPassed) {
+                    const span = document.createElement('span');
+                    span.style.color = 'var(--color-correct)';
+                    span.style.fontWeight = 'bold';
+                    span.textContent = `\nВсе тесты пройдены успешно!`;
+                    sandboxOutput.appendChild(span);
+                }
+
+                run_test_case.destroy();
+
+            } catch (err) {
+                const span = document.createElement('span');
+                span.style.color = 'var(--color-wrong)';
+                span.textContent = err.toString() + '\n';
+                sandboxOutput.appendChild(span);
+            } finally {
+                namespace.destroy();
+                checkCodeBtn.disabled = false;
+                checkCodeBtn.style.opacity = '1';
+                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+            }
+        }
+
         async function initSandboxes() {
             try {
                 // Initialize Pyodide once
@@ -394,6 +531,8 @@ def __transform_and_run(code_str):
                         const sandboxContainer = sandboxEl.querySelector('.sandbox-container');
                         const monacoEditorDiv = sandboxEl.querySelector('.monaco-editor-div');
                         const runCodeBtn = sandboxEl.querySelector('.run-btn');
+                        const checkCodeBtn = sandboxEl.querySelector('.check-btn');
+                        const testCasesScript = sandboxEl.querySelector('.test-cases');
                         const sandboxOutput = sandboxEl.querySelector('.sandbox-output');
                         const copySandboxBtn = sandboxEl.querySelector('.copy-sandbox-btn');
 
@@ -447,10 +586,32 @@ def __transform_and_run(code_str):
                             });
                         }
 
-                        runCodeBtn.addEventListener('click', () => {
-                            const code = monacoEditorInstance.getValue();
-                            executePythonCode(code, sandboxOutput, runCodeBtn);
-                        });
+                        if (runCodeBtn) {
+                            runCodeBtn.addEventListener('click', () => {
+                                const code = monacoEditorInstance.getValue();
+                                executePythonCode(code, sandboxOutput, runCodeBtn);
+                            });
+                        }
+
+                        if (checkCodeBtn) {
+                            checkCodeBtn.addEventListener('click', () => {
+                                let code = monacoEditorInstance.getValue();
+                                const testSuffixScript = sandboxEl.querySelector('.test-suffix');
+                                if (testSuffixScript) {
+                                    code += '\n\n' + testSuffixScript.textContent;
+                                }
+
+                                let testCases = [];
+                                if (testCasesScript) {
+                                    try {
+                                        testCases = JSON.parse(testCasesScript.textContent);
+                                    } catch (e) {
+                                        console.error("Failed to parse test cases", e);
+                                    }
+                                }
+                                executeTestsCode(code, testCases, sandboxOutput, checkCodeBtn);
+                            });
+                        }
                     });
                     
                     // Initialize Runnable Code Blocks

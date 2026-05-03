@@ -259,7 +259,7 @@ print(age)</code></pre>
 
                 <div class="special-block">
                     <div class="block-header">
-                        <span class="block-title">💻 Заголовок блока с песочницей</span>
+                        <span class="block-title">💻 Заголовок блока с песочницей (для экспериментов)</span>
                         <button class="toggle-block">▼</button>
                     </div>
                     <div class="block-body sandbox-body">
@@ -272,12 +272,198 @@ print(age)</code></pre>
                         </div>
                         <div class="sandbox-container">
                             <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <div class="monaco-editor-div" data-code="# Здесь указывается предустановленный код\n# Который будет выполнен при запуске песочницы"></div>
+                            <div class="monaco-editor-div" data-code="# Здесь указывается предустановленный код\n# Который будет выполнен при запуске песочницы\n\nname = input('Введите имя: ')\nprint('Привет, ' + name)"></div>
                             <div class="sandbox-controls">
                                 <button class="run-btn">▶ Запустить</button>
                             </div>
                             <div class="sandbox-output-wrapper">
                                 <strong>Вывод:</strong>
+                                <pre class="sandbox-output"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">💻 Заголовок блока с песочницей (с проверкой)</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body sandbox-body">
+                        <p>Это второе состояние песочницы.</p>
+                        <p>Вместо кнопки "Запустить" здесь кнопка "Проверить". При нажатии код проверяется на скрытых тестовых данных.</p>
+
+                        <script type="application/json" class="test-cases">
+                        [
+                            {
+                                "input": "2\n3",
+                                "output": "5"
+                            },
+                            {
+                                "input": "20\n-3",
+                                "output": "17"
+                            }
+                        ]
+                        </script>
+
+                        <div class="sandbox-loader">
+                            <div class="spinner"></div>
+                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
+                        </div>
+                        <div class="sandbox-container">
+                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
+                            <div class="monaco-editor-div" data-code="# Напишите программу, которая считывает два числа и выводит их сумму\na = int(input())\nb = int(input())\nprint(a + b)"></div>
+                            <div class="sandbox-controls">
+                                <button class="check-btn">✅ Проверить</button>
+                            </div>
+                            <div class="sandbox-output-wrapper">
+                                <strong>Результаты проверки:</strong>
+                                <pre class="sandbox-output"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">💻 Проверка суммы чисел до пустой строки</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body sandbox-body">
+                        <p>Напишите программу, которая считывает числа (по одному в строке), пока не встретит пустую строку. Выведите сумму введенных чисел.</p>
+
+                        <script type="application/json" class="test-cases">
+                        [
+                            {
+                                "input": "1\n2\n3\n\n",
+                                "output": "6"
+                            },
+                            {
+                                "input": "10\n-5\n15\n\n",
+                                "output": "20"
+                            },
+                            {
+                                "input": "\n",
+                                "output": "0"
+                            }
+                        ]
+                        </script>
+
+                        <div class="sandbox-loader">
+                            <div class="spinner"></div>
+                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
+                        </div>
+                        <div class="sandbox-container">
+                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
+                            <div class="monaco-editor-div" data-code="# Ваш код здесь\n"></div>
+                            <div class="sandbox-controls">
+                                <button class="check-btn">✅ Проверить</button>
+                            </div>
+                            <div class="sandbox-output-wrapper">
+                                <strong>Результаты проверки:</strong>
+                                <pre class="sandbox-output"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">💻 Проверка функции</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body sandbox-body">
+                        <p>Напишите функцию <code>is_even(n)</code>, которая возвращает <code>True</code>, если число чётное, и <code>False</code> в противном случае.</p>
+
+                        <script type="application/json" class="test-cases">
+                        [
+                            {
+                                "input": "4",
+                                "output": "True"
+                            },
+                            {
+                                "input": "7",
+                                "output": "False"
+                            },
+                            {
+                                "input": "0",
+                                "output": "True"
+                            }
+                        ]
+                        </script>
+
+                        <div class="sandbox-loader">
+                            <div class="spinner"></div>
+                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
+                        </div>
+                        <script type="text/x-python" class="test-suffix">
+# --- Скрытый проверочный код ---
+if "is_even" not in globals() or not callable(is_even):
+    raise RuntimeError("Ошибка: Функция is_even не найдена. Убедитесь, что вы создали функцию с правильным именем.")
+
+n = int(input())
+print(is_even(n))
+                        </script>
+                        <div class="sandbox-container">
+                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
+                            <div class="monaco-editor-div" data-code="def is_even(n):\n    # Ваш код здесь\n    pass"></div>
+                            <div class="sandbox-controls">
+                                <button class="check-btn">✅ Проверить</button>
+                            </div>
+                            <div class="sandbox-output-wrapper">
+                                <strong>Результаты проверки:</strong>
+                                <pre class="sandbox-output"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="special-block">
+                    <div class="block-header">
+                        <span class="block-title">💻 Проверка класса</span>
+                        <button class="toggle-block">▼</button>
+                    </div>
+                    <div class="block-body sandbox-body">
+                        <p>Напишите класс <code>Rectangle</code>, который принимает в конструкторе ширину и высоту. Метод <code>get_area()</code> должен возвращать площадь прямоугольника.</p>
+
+                        <script type="application/json" class="test-cases">
+                        [
+                            {
+                                "input": "5\n4",
+                                "output": "20"
+                            },
+                            {
+                                "input": "10\n10",
+                                "output": "100"
+                            }
+                        ]
+                        </script>
+
+                        <div class="sandbox-loader">
+                            <div class="spinner"></div>
+                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
+                        </div>
+                        <script type="text/x-python" class="test-suffix">
+# --- Скрытый проверочный код ---
+if "Rectangle" not in globals() or type(Rectangle) != type:
+    raise RuntimeError("Ошибка: Класс Rectangle не найден. Убедитесь, что вы создали класс с правильным именем.")
+
+w = int(input())
+h = int(input())
+rect = Rectangle(w, h)
+if not hasattr(rect, "get_area") or not callable(rect.get_area):
+    raise RuntimeError("Ошибка: Метод get_area не найден в классе Rectangle.")
+
+print(rect.get_area())
+                        </script>
+                        <div class="sandbox-container">
+                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
+                            <div class="monaco-editor-div" data-code="class Rectangle:\n    def __init__(self, width, height):\n        # Ваш код здесь\n        pass\n        \n    def get_area(self):\n        # Ваш код здесь\n        pass"></div>
+                            <div class="sandbox-controls">
+                                <button class="check-btn">✅ Проверить</button>
+                            </div>
+                            <div class="sandbox-output-wrapper">
+                                <strong>Результаты проверки:</strong>
                                 <pre class="sandbox-output"></pre>
                             </div>
                         </div>
