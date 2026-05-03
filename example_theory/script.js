@@ -27,6 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if(fabBtn) fabBtn.addEventListener('click', toggleSidebar);
     if(overlay) overlay.addEventListener('click', toggleSidebar);
 
+    window.addEventListener('resize', () => {
+        if (isMobileOrTablet()) {
+            sidebar.classList.remove('closed');
+        } else {
+            sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+        }
+    });
+
     tocLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent default hash jump
@@ -63,66 +72,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Update TOC active link based on center of screen
+    // Update TOC active link using Intersection Observer
     const contentWrapper = document.querySelector('.content-wrapper');
     const sections = document.querySelectorAll('.lesson-section');
 
-    function updateActiveTOC() {
-        if (!contentWrapper || sections.length === 0) return;
+    const observerOptions = {
+        root: contentWrapper,
+        rootMargin: '-30% 0px -50% 0px',
+        threshold: 0
+    };
 
-        const wrapperRect = contentWrapper.getBoundingClientRect();
-        // Calculate the center Y coordinate relative to the viewport
-        const centerY = wrapperRect.top + wrapperRect.height / 2;
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                
+                tocLinks.forEach(link => {
+                    const isActive = link.classList.contains('active');
+                    const shouldBeActive = link.getAttribute('href') === `#${id}`;
 
-        let activeSection = null;
-
-        // 1. Check which section contains the center point
-        for (let section of sections) {
-            const rect = section.getBoundingClientRect();
-            if (centerY >= rect.top && centerY <= rect.bottom) {
-                activeSection = section;
-                break;
+                    if (shouldBeActive && !isActive) {
+                        link.classList.add('active');
+                    } else if (!shouldBeActive && isActive) {
+                        link.classList.remove('active');
+                    }
+                });
             }
-        }
+        });
+    }, observerOptions);
 
-        // 2. If center is in a gap (e.g. over a separator hr), find the closest section
-        if (!activeSection) {
-            let minDistance = Infinity;
-            for (let section of sections) {
-                const rect = section.getBoundingClientRect();
-                const distToTop = Math.abs(centerY - rect.top);
-                const distToBottom = Math.abs(centerY - rect.bottom);
-                const closestDist = Math.min(distToTop, distToBottom);
-
-                if (closestDist < minDistance) {
-                    minDistance = closestDist;
-                    activeSection = section;
-                }
-            }
-        }
-
-        if (activeSection) {
-            const id = activeSection.getAttribute('id');
-            let hasChanges = false;
-
-            tocLinks.forEach(link => {
-                const isActive = link.classList.contains('active');
-                const shouldBeActive = link.getAttribute('href') === `#${id}`;
-
-                if (shouldBeActive && !isActive) {
-                    link.classList.add('active');
-                    hasChanges = true;
-                } else if (!shouldBeActive && isActive) {
-                    link.classList.remove('active');
-                    hasChanges = true;
-                }
-            });
-        }
-    }
-
-    contentWrapper.addEventListener('scroll', updateActiveTOC, { passive: true });
-    // Initialize active link on load
-    updateActiveTOC();
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
 
 
     // ==========================================
@@ -250,37 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // 4. Code Block Syntax Highlight & Copy
+    // 4. Code Block Copy
     // ==========================================
-    const codeBlocks = document.querySelectorAll('.python-code');
-    const pythonKeywords = ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'class', 'import', 'from', 'True', 'False', 'None', 'and', 'or', 'not'];
-    const pythonFunctions = ['print', 'len', 'range', 'str', 'int', 'float'];
-
-    codeBlocks.forEach(block => {
-        let code = block.textContent;
-        // Escape HTML
-        code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-        // Strings
-        code = code.replace(/(["'])(.*?)\1/g, '<span class="py-string">$&</span>');
-
-        // Comments
-        code = code.replace(/(#.*)/g, '<span class="py-comment">$1</span>');
-
-        // Keywords
-        const kwRegex = new RegExp(`\\b(${pythonKeywords.join('|')})\\b`, 'g');
-        code = code.replace(kwRegex, '<span class="py-keyword">$1</span>');
-
-        // Functions
-        const fnRegex = new RegExp(`\\b(${pythonFunctions.join('|')})\\b(?=\\()`, 'g');
-        code = code.replace(fnRegex, '<span class="py-function">$1</span>');
-
-        // Numbers
-        code = code.replace(/\b(\d+(\.\d+)?)\b/g, '<span class="py-number">$1</span>');
-
-        block.innerHTML = code;
-    });
-
     const copyBtns = document.querySelectorAll('.copy-btn:not(.copy-sandbox-btn)');
     copyBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -291,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             navigator.clipboard.writeText(code).then(() => {
                 const originalHTML = button.innerHTML;
-                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M15.188 5.11a.5.5 0 0 1 .752.626l-.056.084-7.5 9a.5.5 0 0 1-.738.033l-3.5-3.5-.064-.078a.501.501 0 0 1 .693-.693l.078.064 3.113 3.113 7.15-8.58z"/></svg>';
+                button.innerHTML = '<svg width="16" height="16"><use href="#icon-check"></use></svg>';
                 setTimeout(() => {
                     button.innerHTML = originalHTML;
                 }, 3000);
@@ -310,6 +262,118 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if ((sandboxInstances.length > 0 || runnableCodeBlocks.length > 0) && typeof loadPyodide !== 'undefined' && typeof require !== 'undefined') {
         let pyodideInstance = null;
+
+        async function executePythonCode(code, sandboxOutput, runCodeBtn) {
+            if (!pyodideInstance) return;
+
+            sandboxOutput.innerHTML = '';
+            sandboxOutput.style.color = '#e0e0e0';
+
+            runCodeBtn.disabled = true;
+            runCodeBtn.style.opacity = '0.7';
+
+            const namespace = pyodideInstance.globals.get("dict")();
+
+            // 1. Изолируем функцию input
+            namespace.set("__async_input", async (promptText) => {
+                return new Promise((resolve) => {
+                    if (promptText) {
+                        sandboxOutput.appendChild(document.createTextNode(promptText));
+                    }
+                    const inputField = document.createElement('input');
+                    inputField.type = 'text';
+                    inputField.className = 'sandbox-input-field';
+
+                    sandboxOutput.appendChild(inputField);
+                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+                    inputField.focus();
+
+                    inputField.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            const val = inputField.value;
+                            inputField.remove();
+
+                            const valSpan = document.createElement('span');
+                            valSpan.textContent = val + '\n';
+                            valSpan.style.color = 'var(--color-text-accent)';
+                            sandboxOutput.appendChild(valSpan);
+                            sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+
+                            resolve(val);
+                        }
+                    });
+                });
+            });
+
+            // 2. Изолируем вывод (print)
+            namespace.set("__js_print", (str) => {
+                sandboxOutput.appendChild(document.createTextNode(str));
+                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+            });
+
+            namespace.set("__js_err_print", (str) => {
+                const span = document.createElement('span');
+                span.style.color = 'var(--color-wrong)';
+                span.textContent = str;
+                sandboxOutput.appendChild(span);
+                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+            });
+
+            try {
+                await pyodideInstance.runPythonAsync(`
+import sys
+import builtins
+import ast
+
+def __custom_print(*args, sep=' ', end='\\n', file=None, flush=False):
+    if file is None or file == getattr(sys, 'stdout', None):
+        __js_print(sep.join(map(str, args)) + end)
+    elif file == getattr(sys, 'stderr', None):
+        __js_err_print(sep.join(map(str, args)) + end)
+    else:
+        builtins.print(*args, sep=sep, end=end, file=file, flush=flush)
+
+print = __custom_print
+
+class AsyncInputTransformer(ast.NodeTransformer):
+    def visit_Call(self, node):
+        self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'input':
+            return ast.Await(value=ast.Call(
+                func=ast.Name(id='__async_input', ctx=ast.Load()),
+                args=node.args,
+                keywords=node.keywords
+            ))
+        return node
+
+def __transform_and_run(code_str):
+    tree = ast.parse(code_str)
+    tree = AsyncInputTransformer().visit(tree)
+    ast.fix_missing_locations(tree)
+    return ast.unparse(tree)
+                `, { globals: namespace });
+
+                namespace.set("__user_code", code);
+                const asyncCode = await pyodideInstance.runPythonAsync(`__transform_and_run(__user_code)`, { globals: namespace });
+
+                await pyodideInstance.runPythonAsync(asyncCode, { globals: namespace });
+
+                if (sandboxOutput.childNodes.length === 0) {
+                    sandboxOutput.textContent = 'No output';
+                    sandboxOutput.style.color = '#e0e0e0';
+                }
+            } catch (err) {
+                const span = document.createElement('span');
+                span.style.color = 'var(--color-wrong)';
+                span.textContent = err.toString() + '\n';
+                sandboxOutput.appendChild(span);
+                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
+            } finally {
+                namespace.destroy();
+                runCodeBtn.disabled = false;
+                runCodeBtn.style.opacity = '1';
+            }
+        }
 
         async function initSandboxes() {
             try {
@@ -373,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const code = monacoEditorInstance.getValue();
                                 navigator.clipboard.writeText(code).then(() => {
                                     const originalHTML = copySandboxBtn.innerHTML;
-                                    copySandboxBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M15.188 5.11a.5.5 0 0 1 .752.626l-.056.084-7.5 9a.5.5 0 0 1-.738.033l-3.5-3.5-.064-.078a.501.501 0 0 1 .693-.693l.078.064 3.113 3.113 7.15-8.58z"/></svg>';
+                                    copySandboxBtn.innerHTML = '<svg width="16" height="16"><use href="#icon-check"></use></svg>';
                                     setTimeout(() => {
                                         copySandboxBtn.innerHTML = originalHTML;
                                     }, 3000);
@@ -383,99 +447,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                         }
 
-                        runCodeBtn.addEventListener('click', async () => {
-                            if (!pyodideInstance) return;
-
-                            sandboxOutput.innerHTML = '';
-                            sandboxOutput.style.color = '#e0e0e0';
-
-                            runCodeBtn.disabled = true;
-                            runCodeBtn.style.opacity = '0.7';
-
+                        runCodeBtn.addEventListener('click', () => {
                             const code = monacoEditorInstance.getValue();
-                            const namespace = pyodideInstance.globals.get("dict")();
-
-                            // 1. Изолируем функцию input для текущей песочницы
-                            namespace.set("__async_input", async (promptText) => {
-                                return new Promise((resolve) => {
-                                    if (promptText) {
-                                        sandboxOutput.appendChild(document.createTextNode(promptText));
-                                    }
-                                    const inputField = document.createElement('input');
-                                    inputField.type = 'text';
-                                    inputField.className = 'sandbox-input-field';
-
-                                    sandboxOutput.appendChild(inputField);
-                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                                    inputField.focus();
-
-                                    inputField.addEventListener('keydown', function(e) {
-                                        if (e.key === 'Enter') {
-                                            const val = inputField.value;
-                                            inputField.remove();
-
-                                            const valSpan = document.createElement('span');
-                                            valSpan.textContent = val + '\n';
-                                            valSpan.style.color = 'var(--color-text-accent)';
-                                            sandboxOutput.appendChild(valSpan);
-                                            sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-
-                                            resolve(val);
-                                        }
-                                    });
-                                });
-                            });
-
-                            // 2. Изолируем вывод (print) для текущей песочницы
-                            namespace.set("__js_print", (str) => {
-                                sandboxOutput.appendChild(document.createTextNode(str));
-                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                            });
-
-                            namespace.set("__js_err_print", (str) => {
-                                const span = document.createElement('span');
-                                span.style.color = 'var(--color-wrong)';
-                                span.textContent = str;
-                                sandboxOutput.appendChild(span);
-                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                            });
-
-                            try {
-                                // Переопределяем встроенную функцию print только в локальном неймспейсе
-                                await pyodideInstance.runPythonAsync(`
-import sys
-import builtins
-
-def __custom_print(*args, sep=' ', end='\\n', file=None, flush=False):
-    if file is None or file == getattr(sys, 'stdout', None):
-        __js_print(sep.join(map(str, args)) + end)
-    elif file == getattr(sys, 'stderr', None):
-        __js_err_print(sep.join(map(str, args)) + end)
-    else:
-        builtins.print(*args, sep=sep, end=end, file=file, flush=flush)
-
-print = __custom_print
-                                `, { globals: namespace });
-
-                                const asyncCode = code.replace(/(^|[^\w\.])input\s*\(/g, '$1await __async_input(');
-
-                                await pyodideInstance.runPythonAsync(asyncCode, { globals: namespace });
-
-                                if (sandboxOutput.childNodes.length === 0) {
-                                    sandboxOutput.textContent = 'No output';
-                                    sandboxOutput.style.color = '#e0e0e0';
-                                }
-                            } catch (err) {
-                                const span = document.createElement('span');
-                                span.style.color = 'var(--color-wrong)';
-                                span.textContent = err.toString() + '\n';
-                                sandboxOutput.appendChild(span);
-                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                            } finally {
-                                namespace.destroy();
-                                runCodeBtn.disabled = false;
-                                runCodeBtn.style.opacity = '1';
-                            }
+                            executePythonCode(code, sandboxOutput, runCodeBtn);
                         });
                     });
                     
@@ -488,103 +462,10 @@ print = __custom_print
                         
                         // Only add event listener if we have a run button
                         if (runCodeBtn && codeElem) {
-                            runCodeBtn.addEventListener('click', async () => {
-                                if (!pyodideInstance) return;
-
-                                // Show the output wrapper when clicked
+                            runCodeBtn.addEventListener('click', () => {
                                 sandboxOutputWrapper.style.display = 'block';
-
-                                sandboxOutput.innerHTML = '';
-                                sandboxOutput.style.color = '#e0e0e0';
-
-                                runCodeBtn.disabled = true;
-                                runCodeBtn.style.opacity = '0.7';
-
-                                // Extract raw text content without HTML tags (for syntax highlighting)
                                 const code = codeElem.innerText;
-                                const namespace = pyodideInstance.globals.get("dict")();
-
-                                // 1. Изолируем функцию input
-                                namespace.set("__async_input", async (promptText) => {
-                                    return new Promise((resolve) => {
-                                        if (promptText) {
-                                            sandboxOutput.appendChild(document.createTextNode(promptText));
-                                        }
-                                        const inputField = document.createElement('input');
-                                        inputField.type = 'text';
-                                        inputField.className = 'sandbox-input-field';
-
-                                        sandboxOutput.appendChild(inputField);
-                                        sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                                        inputField.focus();
-
-                                        inputField.addEventListener('keydown', function(e) {
-                                            if (e.key === 'Enter') {
-                                                const val = inputField.value;
-                                                inputField.remove();
-
-                                                const valSpan = document.createElement('span');
-                                                valSpan.textContent = val + '\n';
-                                                valSpan.style.color = 'var(--color-text-accent)';
-                                                sandboxOutput.appendChild(valSpan);
-                                                sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-
-                                                resolve(val);
-                                            }
-                                        });
-                                    });
-                                });
-
-                                // 2. Изолируем вывод (print)
-                                namespace.set("__js_print", (str) => {
-                                    sandboxOutput.appendChild(document.createTextNode(str));
-                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                                });
-
-                                namespace.set("__js_err_print", (str) => {
-                                    const span = document.createElement('span');
-                                    span.style.color = 'var(--color-wrong)';
-                                    span.textContent = str;
-                                    sandboxOutput.appendChild(span);
-                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                                });
-
-                                try {
-                                    // Переопределяем встроенную функцию print только в локальном неймспейсе
-                                    await pyodideInstance.runPythonAsync(`
-import sys
-import builtins
-
-def __custom_print(*args, sep=' ', end='\\n', file=None, flush=False):
-    if file is None or file == getattr(sys, 'stdout', None):
-        __js_print(sep.join(map(str, args)) + end)
-    elif file == getattr(sys, 'stderr', None):
-        __js_err_print(sep.join(map(str, args)) + end)
-    else:
-        builtins.print(*args, sep=sep, end=end, file=file, flush=flush)
-
-print = __custom_print
-                                    `, { globals: namespace });
-
-                                    const asyncCode = code.replace(/(^|[^\w\.])input\s*\(/g, '$1await __async_input(');
-
-                                    await pyodideInstance.runPythonAsync(asyncCode, { globals: namespace });
-
-                                    if (sandboxOutput.childNodes.length === 0) {
-                                        sandboxOutput.textContent = 'No output';
-                                        sandboxOutput.style.color = '#e0e0e0';
-                                    }
-                                } catch (err) {
-                                    const span = document.createElement('span');
-                                    span.style.color = 'var(--color-wrong)';
-                                    span.textContent = err.toString() + '\n';
-                                    sandboxOutput.appendChild(span);
-                                    sandboxOutput.scrollTop = sandboxOutput.scrollHeight;
-                                } finally {
-                                    namespace.destroy();
-                                    runCodeBtn.disabled = false;
-                                    runCodeBtn.style.opacity = '1';
-                                }
+                                executePythonCode(code, sandboxOutput, runCodeBtn);
                             });
                         }
                     });
