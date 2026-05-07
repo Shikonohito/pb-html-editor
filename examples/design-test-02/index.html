@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Python Practice Layouts</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="variant-shell" aria-label="Варианты страницы практики">
+      <div class="variant-switcher" role="tablist" aria-label="Варианты дизайна">
+        <button class="variant-tab is-active" type="button" data-variant="studio" role="tab" aria-selected="true">Studio</button>
+        <button class="variant-tab" type="button" data-variant="notebook" role="tab" aria-selected="false">Notebook</button>
+        <button class="variant-tab" type="button" data-variant="console" role="tab" aria-selected="false">Console</button>
+        <button class="variant-tab" type="button" data-variant="review" role="tab" aria-selected="false">Review</button>
+        <button class="variant-tab" type="button" data-variant="exam" role="tab" aria-selected="false">Exam</button>
+      </div>
+
+      <section class="practice-app variant-studio" data-current-variant="studio">
+        <header class="lesson-header">
+          <button class="sidebar-toggle" type="button" aria-label="Скрыть или открыть оглавление">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4V5Zm4 2v10h10V7H8Z" /></svg>
+          </button>
+          <div class="lesson-title">
+            <span>Урок 04</span>
+            <h1>Списки и циклы в Python</h1>
+          </div>
+          <nav class="task-icon-nav" aria-label="Задания урока"></nav>
+        </header>
+
+        <aside class="task-sidebar">
+          <div class="sidebar-head">
+            <h2>Оглавление</h2>
+            <button class="sidebar-toggle compact" type="button" aria-label="Скрыть или открыть оглавление">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15.5 5-7 7 7 7 1.4-1.4L11.3 12l5.6-5.6L15.5 5Z" /></svg>
+            </button>
+          </div>
+          <ol class="task-list"></ol>
+        </aside>
+
+        <main class="task-main">
+          <div class="task-kicker"></div>
+          <h2 class="active-title"></h2>
+          <div class="task-content"></div>
+        </main>
+      </section>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
