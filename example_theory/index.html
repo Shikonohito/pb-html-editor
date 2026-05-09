@@ -157,6 +157,66 @@ show_city("Баку")</code></pre>
                 </div>
               </div>
             </div>
+
+            <div class="quiz-block" data-quiz-mode="multiple" aria-labelledby="argumentsMultiQuizTitle">
+              <div class="quiz-label">Вопрос с несколькими ответами</div>
+              <h3 id="argumentsMultiQuizTitle">Какие значения являются аргументами при вызове функции?</h3>
+              <pre><code>def greet(name, greeting="Привет"):
+    return f"{greeting}, {name}"
+
+greet("Али", greeting="Салам")</code></pre>
+
+              <div class="quiz-options" role="group" aria-label="Варианты ответа с несколькими верными ответами">
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="true"
+                    data-feedback="Верно: &quot;Али&quot; передают в функцию при вызове, поэтому это аргумент."
+                    aria-pressed="false"
+                  >
+                    <code>"Али"</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="true"
+                    data-feedback="Верно: greeting=&quot;Салам&quot; - именованный аргумент в вызове функции."
+                    aria-pressed="false"
+                  >
+                    <code>greeting="Салам"</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: name - это параметр в определении функции, а не аргумент вызова."
+                    aria-pressed="false"
+                  >
+                    <code>name</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: &quot;Привет&quot; - значение по умолчанию в определении функции. При этом вызове его заменяет аргумент &quot;Салам&quot;."
+                    aria-pressed="false"
+                  >
+                    <code>"Привет"</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section id="scope" class="lesson-section">
@@ -169,6 +229,39 @@ show_city("Баку")</code></pre>
               Это объясняет, почему переменная внутри функции не всегда совпадает с переменной
               с тем же именем в модуле.
             </p>
+
+            <div class="quiz-block" aria-labelledby="scopeInputQuizTitle">
+              <div class="quiz-label">Вопрос с вводом ответа</div>
+              <h3 id="scopeInputQuizTitle">В какой области видимости Python сначала ищет переменную <code>message</code>?</h3>
+              <pre><code>message = "Глобальное значение"
+
+def show_message():
+    message = "Локальное значение"
+    return message</code></pre>
+
+              <form class="quiz-input-form" data-answer="local|локальная|локальной|локальная область|local scope">
+                <label for="scopeAnswer">Введите ответ</label>
+                <div class="quiz-input-row">
+                  <input
+                    id="scopeAnswer"
+                    name="scopeAnswer"
+                    class="quiz-input"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Например: local"
+                    aria-describedby="scopeInputFeedback"
+                  />
+                  <button type="submit" class="quiz-submit">Ответить</button>
+                </div>
+                <p
+                  id="scopeInputFeedback"
+                  class="quiz-feedback"
+                  data-correct-feedback="Верно: внутри функции Python сначала ищет имя в локальной области видимости."
+                  data-incorrect-feedback="Неверно: по правилу LEGB поиск начинается с Local, то есть с локальной области внутри функции."
+                  aria-live="polite"
+                ></p>
+              </form>
+            </div>
           </section>
 
           <section id="lambda" class="lesson-section">
