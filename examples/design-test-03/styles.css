@@ -389,6 +389,102 @@ pre code {
   color: inherit;
 }
 
+.quiz-block {
+  margin-top: 24px;
+  padding: clamp(16px, 2.4vw, 24px);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 62%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+}
+
+.quiz-label {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 5px 9px;
+  border: 1px solid color-mix(in srgb, var(--accent-2) 48%, transparent);
+  border-radius: 8px;
+  color: var(--accent-2);
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.quiz-block h3 {
+  margin: 0;
+  font-size: clamp(1.08rem, 1.5vw, 1.35rem);
+  line-height: 1.25;
+}
+
+.quiz-options {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.quiz-choice {
+  display: grid;
+  gap: 8px;
+}
+
+.quiz-option {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.quiz-option:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.quiz-option.is-correct {
+  border-color: #3ddc97;
+  background: color-mix(in srgb, #3ddc97 18%, var(--surface-strong));
+}
+
+.quiz-option.is-incorrect {
+  border-color: #ff6b6b;
+  background: color-mix(in srgb, #ff6b6b 18%, var(--surface-strong));
+}
+
+.quiz-feedback {
+  overflow: hidden;
+  max-height: 0;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  font-weight: 800;
+  line-height: 1.55;
+  transition:
+    max-height 220ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.quiz-feedback.is-visible {
+  max-height: 120px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lesson-section .quiz-feedback.is-correct {
+  color: #3ddc97;
+}
+
+.lesson-section .quiz-feedback.is-incorrect {
+  color: #ff8a8a;
+}
+
 @media (max-width: 820px) {
   :root {
     --header-height: 76px;

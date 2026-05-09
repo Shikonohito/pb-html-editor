@@ -97,6 +97,66 @@
               именованные аргументы, значения по умолчанию, а также сбор произвольного количества
               значений через <code>*args</code> и <code>**kwargs</code>.
             </p>
+
+            <div class="quiz-block" aria-labelledby="argumentsQuizTitle">
+              <div class="quiz-label">Вопрос по теме аргументов</div>
+              <h3 id="argumentsQuizTitle">Что будет аргументом при вызове функции?</h3>
+              <pre><code>def show_city(city):
+    return city
+
+show_city("Баку")</code></pre>
+
+              <div class="quiz-options" role="group" aria-label="Варианты ответа">
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: city здесь параметр. Параметр стоит в определении функции и принимает переданное значение."
+                    aria-pressed="false"
+                  >
+                    <code>city</code> в строке <code>def show_city(city):</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="true"
+                    data-feedback="Верно: &quot;Баку&quot; - это аргумент, потому что это значение передают функции при вызове."
+                    aria-pressed="false"
+                  >
+                    <code>"Баку"</code> в строке <code>show_city("Баку")</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: show_city - это имя функции, а не данные, которые передают внутрь функции."
+                    aria-pressed="false"
+                  >
+                    Имя функции <code>show_city</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: return возвращает результат из функции, но не является аргументом вызова."
+                    aria-pressed="false"
+                  >
+                    Ключевое слово <code>return</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section id="scope" class="lesson-section">
