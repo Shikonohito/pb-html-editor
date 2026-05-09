@@ -1,500 +1,202 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Краткий заголовок для браузера</title>
-    <link rel="icon" href="https://itstep.az/dist/images/logo/academy-step.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <svg style="display: none;">
-        <symbol id="icon-copy" viewBox="0 0 20 20">
-            <path fill="currentColor" d="M12.5 3A1.5 1.5 0 0 1 14 4.5V6h1.5A1.5 1.5 0 0 1 17 7.5v8a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 6 15.5V14H4.5A1.5 1.5 0 0 1 3 12.5v-8A1.5 1.5 0 0 1 4.5 3zm1.5 9.5a1.5 1.5 0 0 1-1.5 1.5H7v1.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5H14zM4.5 4a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5z"/>
-        </symbol>
-        <symbol id="icon-check" viewBox="0 0 16 16">
-            <path fill="currentColor" d="M15.188 5.11a.5.5 0 0 1 .752.626l-.056.084-7.5 9a.5.5 0 0 1-.738.033l-3.5-3.5-.064-.078a.501.501 0 0 1 .693-.693l.078.064 3.113 3.113 7.15-8.58z"/>
-        </symbol>
-    </svg>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Theory Notes</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="appShell">
+      <header class="topbar">
+        <button class="icon-button sidebar-toggle" id="sidebarToggle" aria-label="Скрыть левую панель" aria-expanded="true">
+          <span aria-hidden="true"></span>
+        </button>
 
-    <button id="mobile-fab" class="mobile-fab" aria-label="Открыть меню">☰</button>
+        <div class="topic-title">
+          <span class="topic-kicker">Python</span>
+          <h1>Функции и область видимости</h1>
+        </div>
 
-    <div id="overlay" class="overlay"></div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Включить светлый вариант" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+      </header>
 
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-top">
-            <button id="toggle-sidebar" class="hamburger-btn" aria-label="Скрыть меню">☰</button>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-head">
+          <span>Оглавление</span>
+          <button class="panel-button" id="innerToggle" aria-label="Скрыть левую панель">
+            <span aria-hidden="true">←</span>
+          </button>
         </div>
-        <div class="sidebar-logo">
-            <div class="sidebar-logo-circle">PyCode</div>
-        </div>
-        <div class="sidebar-creator">© Ivan Ivanov, 2026</div>
-        <div class="sidebar-separator">
-            <span>Содержание</span>
-        </div>
-        <nav class="sidebar-toc">
-            <a href="#section-main-1" class="toc-link active"><span>Ручной дубликат заголовка первого раздела</span> <span class="active-marker">◀</span></a>
-            <a href="#section-main-2" class="toc-link"><span>Ручной дубликат заголовка второго раздела</span> <span class="active-marker">◀</span></a>
-            <a href="#section-self-study-1" class="toc-link"><span>Ручной дубликат заголовка первого раздела из части самостоятельного изучения</span> <span class="active-marker">◀</span></a>
-            <a href="#section-self-study-2" class="toc-link"><span>Ручной дубликат заголовка второго раздела из части самостоятельного изучения</span> <span class="active-marker">◀</span></a>
+
+        <nav class="toc-list" aria-label="Темы курса">
+          <a class="toc-item current" href="#functions">
+            <span>01</span>
+            Функции
+          </a>
+          <a class="toc-item" href="#arguments">
+            <span>02</span>
+            Аргументы
+          </a>
+          <a class="toc-item" href="#scope">
+            <span>03</span>
+            Область видимости
+          </a>
+          <a class="toc-item" href="#lambda">
+            <span>04</span>
+            Lambda
+          </a>
+          <a class="toc-item" href="#practice">
+            <span>05</span>
+            Практика
+          </a>
         </nav>
-    </aside>
 
-    <div class="content-wrapper">
-        <header class="content-top">
-            <h1 class="lesson-title">Главный заголовок теоретического файла в верхнем левом углу</h1>
-        </header>
+        <p class="sidebar-credit">© Ivan Ivanov, 2026</p>
+      </aside>
 
-        <main class="main-content">
-            <div class="main-header">
-                <h2>Главный заголовок теоретического файла</h2>
+      <main class="content">
+        <section class="section-map" aria-labelledby="sectionsTitle">
+          <div>
+            <span class="eyebrow">Разделы темы</span>
+            <h2 id="sectionsTitle">Что важно разобрать</h2>
+          </div>
+
+          <div class="section-grid">
+            <a href="#functions">Определение функций</a>
+            <a href="#arguments">Параметры и значения</a>
+            <a href="#scope">LEGB-правило</a>
+            <a href="#lambda">Анонимные функции</a>
+          </div>
+        </section>
+
+        <article class="lesson">
+          <section id="functions" class="lesson-section">
+            <div class="section-heading">
+              <span>01</span>
+              <h2>Функции</h2>
             </div>
+            <p>
+              Функция в Python — именованный блок кода, который выполняет одну логическую задачу.
+              Она помогает убрать повторение, разделить программу на понятные части и описывать
+              действия через имена.
+            </p>
+            <pre><code>def greet(name):
+    return f"Привет, {name}"</code></pre>
+          </section>
 
-            <section id="section-main-1" class="lesson-section">
-                <h3>Заголовок первого раздела</h3>
-                <p>Параграф, который содержит некоторое описание текущего раздела.</p>
-                <p>Разделы могут содержать несколько параграфов.</p>
-                <p>Разделов может быть несколько, но не могут быть вложенными.</p>
-                <p>Разделы идут друг за другом, имеют разделитель, который визуально отделяет их друг от друга.</p>
-                <p>Разделы могут содержать разные блоки. Блоки могут содержать заголовок и тело. Тело может быть универсальным или специализированным блоком. Тело может содержать такой же блок по структуре, в котором он находится.</p>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">⚙️ Заголовок блока с кодом только для копирования</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body">
-                        <p>Данный блок содержит контейнер с кодом, который можно скопировать, нажав кнопку в правой верхней части контейнера.</p>
-
-                        <div class="code-container">
-                            <button class="copy-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <pre><code>print("Hello, World!")</code></pre>
-                        </div>
-
-                        <p>В данном блоке может быть 0 и более параграфов.</p>
-
-                        <div class="special-block">
-                            <div class="block-header">
-                                <span class="block-title">⚙️ Заголовок вложенного блока</span>
-                                <button class="toggle-block">▼</button>
-                            </div>
-                            <div class="block-body">
-                                <p>Вложенность не должна превышать 2 уровня, так как усложнятся читаемость.</p>
-
-                                <div class="code-container">
-                                    <button class="copy-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                                    <pre><code>print("Hello, World!")</code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <p>Параграфы могут быть между блоками.</p>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">⚙️ Заголовок блока с кодом для копирования и запуска</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body">
-                        <p>Данный блок содержит контейнер с кодом, который можно скопировать, нажав кнопку в правой верхней части контейнера. Также он содержит кнопку "Запустить" для выполнения кода. Результат выполнения отображается ниже, после кода.</p>
-
-                        <div class="runnable-code-wrapper runnable-code">
-                            <div class="code-container">
-                                <button class="copy-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                                <pre><code>print("Hello, World!")</code></pre>
-                            </div>
-                            <div class="runnable-controls">
-                                <button class="run-btn">▶ Запустить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Вывод:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-
-                        <p>В данном блоке может быть 0 и более параграфов.</p>
-                    </div>
-                </div>
-
-                <p>Параграфы могут быть после блоков.</p>
-
-            </section>
-
-            <hr class="section-divider">
-
-            <section id="section-main-2" class="lesson-section">
-                <h3>Заголовок второго раздела</h3>
-
-                <p>Варианты блоков указаны ниже.</p>
-                <p>В заголовках блоков может быть эмодзи, который даёт некоторую визуальную подсказку, про что этот блок.</p>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">⚙️ Заголовок универсального блока</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body">
-                        <p>В заголовках этого блока могут быть эмодзи:
-                            <ul>
-                                <li>📚 - означает определение термина.</li>
-                                <li>⚙️ - означает объяснение алгоритма/кода/идеи/процесса.</li>
-                                <li>⚠️ - означает предупреждение.</li>
-                                <li>💡 - означает подсказка.</li>
-                                <li>✅ - означает верный подход.</li>
-                                <li>❌ - означает неверный подход.</li>
-                            </ul>
-                        </p>
-
-                        <p>Тело может содержать 0 и более параграфов.</p>
-
-                        <p>Тело может содержать блоки с кодом только для чтения:</p>
-
-                        <div class="code-container">
-                            <button class="copy-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <pre><code>age = 25          # int (Целое число)
-pi = 3.1415       # float (Число с плавающей точкой)
-name = "Alice"    # str (Строка)
-is_active = True  # bool (Логический тип)</code></pre>
-                        </div>
-
-                        <p>Тело может содержать блоки с кодом для чтения и запуска, но без возможности изменения кода:</p>
-                        <div class="runnable-code-wrapper runnable-code">
-                            <div class="code-container">
-                                <button class="copy-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                                <pre><code>name = input("Введите ваше имя: ")
-print(name)
-age = int(input("Ваш возраст:"))
-print(age)</code></pre>
-                            </div>
-                            <div class="runnable-controls">
-                                <button class="run-btn">▶ Запустить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Вывод:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-
-                        <p>Тело может содержать вложенные блоки, но не более 2 уровня вложенности.</p>
-                        <div class="special-block">
-                            <div class="block-header">
-                                <span class="block-title">⚠️ Заголовок вложенного блока</span>
-                                <button class="toggle-block">▼</button>
-                            </div>
-                            <div class="block-body">
-                                <p>Вложенность не должна превышать 2 уровня, так как усложнятся читаемость.</p>
-
-                                <div class="code-container">
-                                    <button class="copy-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                                    <pre><code>print("Hello, World!")</code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">❓ Заголовок блока с вопросом и единственным верным ответом</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body test-body">
-                        <div class="test-question">
-                            <p>Заголовок начинается с эмодзи ❓.</p>
-                            <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с вопросом.</p>
-
-                            <p>Может содержать вопрос с единственным верным вариантом ответа (радио-кнопки). При нажатии на вариант сразу же появляется фидбэк о том, почему ответ верный или неверный. Открытый фидбэк скрывается, если выбран другой вариант.</p>
-                            <div class="test-options radio-group">
-                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Первый вариант</label>
-                                <label><input type="radio" name="dt_q1" data-correct="true" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он зелёный, если верный.">Второй вариант</label>
-                                <label><input type="radio" name="dt_q1" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Третий вариант</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">❓ Заголовок блока с вопросом и несколькими верными ответами</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body test-body">
-                        <div class="test-question">
-                            <p>Заголовок начинается с эмодзи ❓.</p>
-                            <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с вопросом.</p>
-
-                            <p>Может содержать вопрос с несколькими верными вариантами ответ (чекбокс). При нажатии на вариант сразу же появляется фидбэк о том, почему ответ верный или неверный. Открытый фидбэк остаётся открытым, если выбран другой вариант, и скрывается только в том случае, если с варианта убирается галочка.</p>
-                            <div class="test-options checkbox-group">
-                                <label><input type="checkbox" data-correct="true" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он зелёный, если верный.">Первый вариант</label>
-                                <label><input type="checkbox" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Второй вариант</label>
-                                <label><input type="checkbox" data-correct="true" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он зелёный, если верный.">Третий вариант</label>
-                                <label><input type="checkbox" data-correct="false" data-feedback="Здесь указывается текст, который должен появиться, когда выбрали этот вариант. Он красный, если неверный.">Четвертый вариант</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">❓ Заголовок блока с открытым вопросом</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body test-body">
-                        <div class="test-question">
-                            <p>Заголовок начинается с эмодзи ❓.</p>
-                            <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с вопросом.</p>
-
-                            <p>Может содержать вопрос, поле для ввода ответа и кнопку "Ответить". При нажатии на кнопку появляется фидбэк. Если ответ неверный, то фидбэк покажет, что ответ неверный, и может содержать подсказку к верному ответу. Если же ответ верный, то фидбэк покажет, что ответ верный, и может содержать дополнительные объяснения к верному ответу. Проверяется точное совпадение, символ в символ.</p>
-                            <div class="test-input-group">
-                                <input type="text" data-correct-answer="Верный ответ" class="test-text-input" placeholder="Введите ответ...">
-                                <button class="check-input-btn" data-feedback="Здесь указывается текст, который должен появиться, когда введён верный ответ." data-wrong="Здесь указывается текст, который должен появиться, когда введён неверный ответ.">Ответить</button>
-                            </div>
-                            <div class="feedback-area"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">💻 Заголовок блока с песочницей (для экспериментов)</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body sandbox-body">
-                        <p>Заголовок начинается с эмодзи 💻.</p>
-                        <p>Может содержать 1 и более параграфов. Для визуальной красоты в этом блоке может быть только 1 блок с кодом.</p>
-
-                        <div class="sandbox-loader">
-                            <div class="spinner"></div>
-                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
-                        </div>
-                        <div class="sandbox-container">
-                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <div class="monaco-editor-div" data-code="# Здесь указывается предустановленный код\n# Который будет выполнен при запуске песочницы\n\nname = input('Введите имя: ')\nprint('Привет, ' + name)"></div>
-                            <div class="sandbox-controls">
-                                <button class="run-btn">▶ Запустить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Вывод:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">💻 Заголовок блока с песочницей (с проверкой)</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body sandbox-body">
-                        <p>Это второе состояние песочницы.</p>
-                        <p>Вместо кнопки "Запустить" здесь кнопка "Проверить". При нажатии код проверяется на скрытых тестовых данных.</p>
-
-                        <script type="application/json" class="test-cases">
-                        [
-                            {
-                                "input": "2\n3",
-                                "output": "5"
-                            },
-                            {
-                                "input": "20\n-3",
-                                "output": "17"
-                            }
-                        ]
-                        </script>
-
-                        <div class="sandbox-loader">
-                            <div class="spinner"></div>
-                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
-                        </div>
-                        <div class="sandbox-container">
-                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <div class="monaco-editor-div" data-code="# Напишите программу, которая считывает два числа и выводит их сумму\na = int(input())\nb = int(input())\nprint(a + b)"></div>
-                            <div class="sandbox-controls">
-                                <button class="check-btn">▶ Проверить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Результаты проверки:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">💻 Проверка суммы чисел до пустой строки</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body sandbox-body">
-                        <p>Напишите программу, которая считывает числа (по одному в строке), пока не встретит пустую строку. Выведите сумму введенных чисел.</p>
-
-                        <script type="application/json" class="test-cases">
-                        [
-                            {
-                                "input": "1\n2\n3\n\n",
-                                "output": "6"
-                            },
-                            {
-                                "input": "10\n-5\n15\n\n",
-                                "output": "20"
-                            },
-                            {
-                                "input": "\n",
-                                "output": "0"
-                            }
-                        ]
-                        </script>
-
-                        <div class="sandbox-loader">
-                            <div class="spinner"></div>
-                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
-                        </div>
-                        <div class="sandbox-container">
-                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <div class="monaco-editor-div" data-code="# Ваш код здесь\n"></div>
-                            <div class="sandbox-controls">
-                                <button class="check-btn">▶ Проверить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Результаты проверки:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">💻 Проверка функции</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body sandbox-body">
-                        <p>Напишите функцию <code>is_even(n)</code>, которая возвращает <code>True</code>, если число чётное, и <code>False</code> в противном случае.</p>
-
-                        <script type="application/json" class="test-cases">
-                        [
-                            {
-                                "input": "4",
-                                "output": "True"
-                            },
-                            {
-                                "input": "7",
-                                "output": "False"
-                            },
-                            {
-                                "input": "0",
-                                "output": "True"
-                            }
-                        ]
-                        </script>
-
-                        <div class="sandbox-loader">
-                            <div class="spinner"></div>
-                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
-                        </div>
-                        <script type="text/x-python" class="test-suffix">
-# --- Скрытый проверочный код ---
-if "is_even" not in globals() or not callable(is_even):
-    raise RuntimeError("Ошибка: Функция is_even не найдена. Убедитесь, что вы создали функцию с правильным именем.")
-
-n = int(input())
-print(is_even(n))
-                        </script>
-                        <div class="sandbox-container">
-                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <div class="monaco-editor-div" data-code="def is_even(n):\n    # Ваш код здесь\n    pass"></div>
-                            <div class="sandbox-controls">
-                                <button class="check-btn">▶ Проверить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Результаты проверки:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="special-block">
-                    <div class="block-header">
-                        <span class="block-title">💻 Проверка класса</span>
-                        <button class="toggle-block">▼</button>
-                    </div>
-                    <div class="block-body sandbox-body">
-                        <p>Напишите класс <code>Rectangle</code>, который принимает в конструкторе ширину и высоту. Метод <code>get_area()</code> должен возвращать площадь прямоугольника.</p>
-
-                        <script type="application/json" class="test-cases">
-                        [
-                            {
-                                "input": "5\n4",
-                                "output": "20"
-                            },
-                            {
-                                "input": "10\n10",
-                                "output": "100"
-                            }
-                        ]
-                        </script>
-
-                        <div class="sandbox-loader">
-                            <div class="spinner"></div>
-                            <p>Инициализация среды Python. Пожалуйста, подождите...</p>
-                        </div>
-                        <script type="text/x-python" class="test-suffix">
-# --- Скрытый проверочный код ---
-if "Rectangle" not in globals() or type(Rectangle) != type:
-    raise RuntimeError("Ошибка: Класс Rectangle не найден. Убедитесь, что вы создали класс с правильным именем.")
-
-w = int(input())
-h = int(input())
-rect = Rectangle(w, h)
-if not hasattr(rect, "get_area") or not callable(rect.get_area):
-    raise RuntimeError("Ошибка: Метод get_area не найден в классе Rectangle.")
-
-print(rect.get_area())
-                        </script>
-                        <div class="sandbox-container">
-                            <button class="copy-btn copy-sandbox-btn" title="Copy"><svg width="16" height="16"><use href="#icon-copy"></use></svg></button>
-                            <div class="monaco-editor-div" data-code="class Rectangle:\n    def __init__(self, width, height):\n        # Ваш код здесь\n        pass\n        \n    def get_area(self):\n        # Ваш код здесь\n        pass"></div>
-                            <div class="sandbox-controls">
-                                <button class="check-btn">▶ Проверить</button>
-                            </div>
-                            <div class="sandbox-output-wrapper">
-                                <strong>Результаты проверки:</strong>
-                                <pre class="sandbox-output"></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="section-divider">
-
-            <div class="main-header">
-                <h2>Заголовок части теоретического файла для самостоятельного изучения</h2>
+          <section id="arguments" class="lesson-section">
+            <div class="section-heading">
+              <span>02</span>
+              <h2>Аргументы</h2>
             </div>
+            <p>
+              Аргументы передают функции данные. В Python можно использовать позиционные аргументы,
+              именованные аргументы, значения по умолчанию, а также сбор произвольного количества
+              значений через <code>*args</code> и <code>**kwargs</code>.
+            </p>
 
+            <div class="quiz-block" aria-labelledby="argumentsQuizTitle">
+              <div class="quiz-label">Вопрос по теме аргументов</div>
+              <h3 id="argumentsQuizTitle">Что будет аргументом при вызове функции?</h3>
+              <pre><code>def show_city(city):
+    return city
 
-            <section id="section-self-study-1" class="lesson-section">
-                <h3>Заголовок первого раздела части самостоятельного изучения</h3>
-                <p>После главной части в самом конце может быть часть самостоятельного изучения, которое строится по тому же принципу, что и главная часть.</p>
-            </section>
+show_city("Баку")</code></pre>
 
-            <hr class="section-divider">
+              <div class="quiz-options" role="group" aria-label="Варианты ответа">
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: city здесь параметр. Параметр стоит в определении функции и принимает переданное значение."
+                    aria-pressed="false"
+                  >
+                    <code>city</code> в строке <code>def show_city(city):</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="true"
+                    data-feedback="Верно: &quot;Баку&quot; - это аргумент, потому что это значение передают функции при вызове."
+                    aria-pressed="false"
+                  >
+                    <code>"Баку"</code> в строке <code>show_city("Баку")</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: show_city - это имя функции, а не данные, которые передают внутрь функции."
+                    aria-pressed="false"
+                  >
+                    Имя функции <code>show_city</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+                <div class="quiz-choice">
+                  <button
+                    type="button"
+                    class="quiz-option"
+                    data-correct="false"
+                    data-feedback="Неверно: return возвращает результат из функции, но не является аргументом вызова."
+                    aria-pressed="false"
+                  >
+                    Ключевое слово <code>return</code>
+                  </button>
+                  <p class="quiz-feedback" aria-live="polite"></p>
+                </div>
+              </div>
+            </div>
+          </section>
 
-            <section id="section-self-study-2" class="lesson-section">
-                <h3>Заголовок второго раздела части самостоятельного изучения</h3>
-                <p>Строится по тому же принципу, что и главная часть.</p>
-            </section>
-        </main>
+          <section id="scope" class="lesson-section">
+            <div class="section-heading">
+              <span>03</span>
+              <h2>Область видимости</h2>
+            </div>
+            <p>
+              При поиске имени Python следует правилу LEGB: Local, Enclosing, Global, Built-in.
+              Это объясняет, почему переменная внутри функции не всегда совпадает с переменной
+              с тем же именем в модуле.
+            </p>
+          </section>
+
+          <section id="lambda" class="lesson-section">
+            <div class="section-heading">
+              <span>04</span>
+              <h2>Lambda</h2>
+            </div>
+            <p>
+              Lambda-функция нужна для короткого выражения без отдельного имени. Ее удобно применять
+              с <code>sorted()</code>, <code>map()</code> или <code>filter()</code>, когда логика
+              помещается в одну строку.
+            </p>
+          </section>
+
+          <section id="practice" class="lesson-section">
+            <div class="section-heading">
+              <span>05</span>
+              <h2>Практика</h2>
+            </div>
+            <p>
+              Лучший способ закрепить тему — переписать повторяющийся код в функции, затем добавить
+              параметры и проверить, как меняется результат при разных входных данных.
+            </p>
+          </section>
+        </article>
+      </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs/loader.min.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
