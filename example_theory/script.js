@@ -13,6 +13,7 @@ const sectionById = new Map(Array.from(lessonSections, (section) => [section.id,
 let scrollTicking = false;
 let pyodideReadyPromise;
 let monacoReadyPromise;
+const monacoEditors = new Set();
 
 function setSidebar(open) {
   appShell.classList.toggle("sidebar-collapsed", !open);
@@ -167,6 +168,12 @@ function updateEditorThemes() {
   }
 
   window.monaco.editor.setTheme(getEditorTheme());
+}
+
+function relayoutMonacoEditors() {
+  monacoEditors.forEach((editor) => {
+    editor.layout();
+  });
 }
 
 function getMonaco() {
@@ -459,9 +466,14 @@ function createMonacoEditor(monaco, container, source, options = {}) {
   });
 
   autoSizeMonacoEditor(editor, container);
+  monacoEditors.add(editor);
 
   return editor;
 }
+
+window.addEventListener("resize", () => {
+  window.requestAnimationFrame(relayoutMonacoEditors);
+});
 
 codeLabs.forEach((lab) => {
   const runButton = lab.querySelector(".run-button");

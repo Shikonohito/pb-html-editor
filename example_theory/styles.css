@@ -338,6 +338,7 @@ a {
 }
 
 .lesson-section {
+  min-width: 0;
   scroll-margin-top: calc(var(--header-height) + 24px);
   padding: clamp(18px, 3vw, 32px);
   border: 1px solid var(--line);
@@ -393,6 +394,7 @@ pre code {
 
 .code-lab {
   display: grid;
+  min-width: 0;
   gap: 12px;
   margin-top: 22px;
 }
@@ -490,6 +492,8 @@ pre code {
 
 .code-editor {
   min-height: 0;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -563,6 +567,7 @@ pre code {
 }
 
 .quiz-block {
+  min-width: 0;
   margin-top: 24px;
   padding: clamp(16px, 2.4vw, 24px);
   border: 1px solid color-mix(in srgb, var(--accent-2) 62%, var(--line));
