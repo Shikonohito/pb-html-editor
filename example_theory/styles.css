@@ -391,6 +391,124 @@ pre code {
   color: inherit;
 }
 
+.code-lab {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.code-lab-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.code-lab h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.4vw, 1.22rem);
+  line-height: 1.2;
+}
+
+.run-button,
+.code-input-submit {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--accent);
+  color: #15120a;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition:
+    border-color 160ms ease,
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.run-button {
+  flex: 0 0 auto;
+  padding: 0 16px;
+}
+
+.run-button:hover,
+.code-input-submit:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.run-button:disabled,
+.code-input-submit:disabled {
+  cursor: progress;
+  filter: saturate(0.7);
+  opacity: 0.76;
+}
+
+.code-editor {
+  min-height: 240px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--code-bg);
+}
+
+.code-source {
+  display: none;
+}
+
+.code-output {
+  min-height: 96px;
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  font: 0.92rem/1.55 Consolas, "Cascadia Mono", "SFMono-Regular", monospace;
+  white-space: pre-wrap;
+}
+
+.code-output.is-error {
+  border-color: color-mix(in srgb, var(--feedback-incorrect) 70%, var(--line));
+  color: var(--feedback-incorrect);
+}
+
+.code-output.is-waiting {
+  border-color: color-mix(in srgb, var(--accent-2) 70%, var(--line));
+}
+
+.code-input-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.code-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.code-input {
+  min-height: 42px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+  color: var(--text);
+  font: inherit;
+}
+
+.code-input:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent-2) 68%, transparent);
+  outline-offset: 2px;
+}
+
+.code-input-submit {
+  padding: 0 14px;
+}
+
 .quiz-block {
   margin-top: 24px;
   padding: clamp(16px, 2.4vw, 24px);
@@ -606,6 +724,21 @@ pre code {
 
   .quiz-input-row {
     grid-template-columns: 1fr;
+  }
+
+  .code-lab-head,
+  .code-input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .code-lab-head {
+    display: grid;
+    align-items: stretch;
+  }
+
+  .run-button,
+  .code-input-submit {
+    width: 100%;
   }
 
   .section-map {

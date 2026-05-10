@@ -6,9 +6,12 @@ const tocItems = document.querySelectorAll(".toc-item");
 const lessonSections = document.querySelectorAll(".lesson-section");
 const quizOptions = document.querySelectorAll(".quiz-option");
 const quizInputForms = document.querySelectorAll(".quiz-input-form");
+const codeLabs = document.querySelectorAll("[data-code-lab]");
 const mobileSidebarQuery = window.matchMedia("(max-width: 820px)");
 const sectionById = new Map(Array.from(lessonSections, (section) => [section.id, section]));
 let scrollTicking = false;
+let pyodideReadyPromise;
+let monacoReadyPromise;
 
 function setSidebar(open) {
   appShell.classList.toggle("sidebar-collapsed", !open);
@@ -98,6 +101,7 @@ function setLightTheme(enabled) {
 
 themeToggle.addEventListener("click", () => {
   setLightTheme(!document.body.classList.contains("theme-light"));
+  updateEditorThemes();
 });
 
 quizOptions.forEach((option) => {
@@ -151,3 +155,225 @@ quizInputForms.forEach((form) => {
     feedback.className = `quiz-feedback is-visible ${isCorrect ? "is-correct" : "is-incorrect"}`;
   });
 });
+
+function getEditorTheme() {
+  return document.body.classList.contains("theme-light") ? "vs" : "vs-dark";
+}
+
+function updateEditorThemes() {
+  if (!window.monaco) {
+    return;
+  }
+
+  window.monaco.editor.setTheme(getEditorTheme());
+}
+
+function getMonaco() {
+  if (monacoReadyPromise) {
+    return monacoReadyPromise;
+  }
+
+  monacoReadyPromise = new Promise((resolve, reject) => {
+    if (window.monaco) {
+      resolve(window.monaco);
+      return;
+    }
+
+    if (!window.require) {
+      reject(new Error("Monaco loader is not available"));
+      return;
+    }
+
+    window.require.config({
+      paths: {
+        vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs",
+      },
+    });
+    window.require(["vs/editor/editor.main"], () => resolve(window.monaco), reject);
+  });
+
+  return monacoReadyPromise;
+}
+
+function getPyodide() {
+  if (pyodideReadyPromise) {
+    return pyodideReadyPromise;
+  }
+
+  pyodideReadyPromise = window.loadPyodide({
+    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/",
+  });
+
+  return pyodideReadyPromise;
+}
+
+function appendOutput(output, text) {
+  output.append(document.createTextNode(text));
+  output.scrollTop = output.scrollHeight;
+}
+
+function requestCodeInput(output, promptText) {
+  return new Promise((resolve) => {
+    output.classList.add("is-waiting");
+    appendOutput(output, promptText || "");
+
+    const form = document.createElement("form");
+    form.className = "code-input-form";
+    form.innerHTML = `
+      <div class="code-input-row">
+        <input class="code-input" type="text" autocomplete="off" />
+        <button class="code-input-submit" type="submit">Ввести</button>
+      </div>
+    `;
+
+    const input = form.querySelector(".code-input");
+    output.append(form);
+    input.focus();
+    output.scrollTop = output.scrollHeight;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const value = input.value;
+
+      form.remove();
+      output.classList.remove("is-waiting");
+      appendOutput(output, `${value}\n`);
+      resolve(value);
+    });
+  });
+}
+
+function prepareInteractiveCode(code) {
+  return code.replace(/\binput\s*\(/g, "await input(");
+}
+
+function hasInputInsideBlock(code) {
+  return code.split("\n").some((line) => /^\s+\S/.test(line) && /\binput\s*\(/.test(line));
+}
+
+function getInputPrompts(code) {
+  const prompts = [];
+  const inputPattern = /\binput\s*\(\s*(?:"([^"]*)"|'([^']*)')?/g;
+  let match = inputPattern.exec(code);
+
+  while (match) {
+    prompts.push(match[1] || match[2] || "Введите значение: ");
+    match = inputPattern.exec(code);
+  }
+
+  return prompts;
+}
+
+async function collectQueuedInput(output, code) {
+  const prompts = getInputPrompts(code);
+  const values = [];
+
+  for (const promptText of prompts) {
+    values.push(await requestCodeInput(output, promptText));
+  }
+
+  return values;
+}
+
+async function runCodeLab(lab) {
+  const runButton = lab.querySelector(".run-button");
+  const output = lab.querySelector(".code-output");
+  const editor = lab.editor;
+  const source = lab.querySelector(".code-source");
+  const code = editor ? editor.getValue() : source.value;
+
+  output.className = "code-output";
+  output.textContent = "";
+  runButton.disabled = true;
+  runButton.textContent = "Запуск...";
+
+  try {
+    if (!window.loadPyodide) {
+      throw new Error("Pyodide is not loaded");
+    }
+
+    const pyodide = await getPyodide();
+
+    pyodide.setStdout({
+      batched: (text) => appendOutput(output, `${text}\n`),
+    });
+    pyodide.setStderr({
+      batched: (text) => appendOutput(output, `${text}\n`),
+    });
+    window.lessonRequestInput = (promptText) => requestCodeInput(output, promptText);
+    pyodide.setStdin({
+      stdin: () => "",
+    });
+
+    if (hasInputInsideBlock(code)) {
+      const inputValues = await collectQueuedInput(output, code);
+
+      pyodide.setStdin({
+        stdin: () => inputValues.shift() || "",
+      });
+      await pyodide.runPythonAsync(code);
+    } else {
+      const wrappedCode = `
+import builtins
+from js import lessonRequestInput
+
+async def input(prompt=""):
+    return await lessonRequestInput(prompt)
+
+${prepareInteractiveCode(code)}
+`;
+
+      await pyodide.runPythonAsync(wrappedCode);
+    }
+
+    if (!output.textContent.trim()) {
+      appendOutput(output, "Код выполнен без вывода.\n");
+    }
+  } catch (error) {
+    output.classList.add("is-error");
+    appendOutput(output, `${error.message || error}\n`);
+  } finally {
+    runButton.disabled = false;
+    runButton.textContent = "Запустить";
+  }
+}
+
+function initFallbackEditor(lab) {
+  const source = lab.querySelector(".code-source");
+  const container = lab.querySelector(".code-editor");
+
+  source.style.display = "block";
+  source.classList.add("code-editor");
+  container.remove();
+}
+
+codeLabs.forEach((lab) => {
+  const runButton = lab.querySelector(".run-button");
+
+  runButton.addEventListener("click", () => runCodeLab(lab));
+});
+
+if (codeLabs.length) {
+  getMonaco()
+    .then((monaco) => {
+      codeLabs.forEach((lab) => {
+        const container = lab.querySelector(".code-editor");
+        const source = lab.querySelector(".code-source");
+
+        lab.editor = monaco.editor.create(container, {
+          value: source.value,
+          language: "python",
+          theme: getEditorTheme(),
+          automaticLayout: true,
+          fontSize: 14,
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
+          tabSize: 4,
+          wordWrap: "on",
+        });
+      });
+    })
+    .catch(() => {
+      codeLabs.forEach(initFallbackEditor);
+    });
+}

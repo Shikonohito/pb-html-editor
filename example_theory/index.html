@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Python Theory Notes</title>
+    <link rel="icon" href="data:," />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -48,10 +49,6 @@
             <span>04</span>
             Lambda
           </a>
-          <a class="toc-item" href="#practice">
-            <span>05</span>
-            Практика
-          </a>
         </nav>
 
         <p class="sidebar-credit">© Ivan Ivanov, 2026</p>
@@ -85,6 +82,20 @@
             </p>
             <pre><code>def greet(name):
     return f"Привет, {name}"</code></pre>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Проверь функцию</h3>
+                <button type="button" class="run-button">Запустить</button>
+              </div>
+              <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              <textarea class="code-source" aria-label="Исходный код Python">def greet(name):
+    return f"Привет, {name}"
+
+name = input("Введите имя: ")
+print(greet(name))</textarea>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
           </section>
 
           <section id="arguments" class="lesson-section">
@@ -274,22 +285,26 @@ def show_message():
               с <code>sorted()</code>, <code>map()</code> или <code>filter()</code>, когда логика
               помещается в одну строку.
             </p>
-          </section>
 
-          <section id="practice" class="lesson-section">
-            <div class="section-heading">
-              <span>05</span>
-              <h2>Практика</h2>
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Проверь lambda</h3>
+                <button type="button" class="run-button">Запустить</button>
+              </div>
+              <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              <textarea class="code-source" aria-label="Исходный код Python">numbers = [1, 2, 3, 4, 5]
+squares = list(map(lambda number: number ** 2, numbers))
+
+print(squares)</textarea>
+              <div class="code-output" aria-live="polite"></div>
             </div>
-            <p>
-              Лучший способ закрепить тему — переписать повторяющийся код в функции, затем добавить
-              параметры и проверить, как меняется результат при разных входных данных.
-            </p>
           </section>
         </article>
       </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
