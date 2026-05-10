@@ -489,7 +489,7 @@ pre code {
 }
 
 .code-editor {
-  min-height: 240px;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -498,7 +498,6 @@ pre code {
 
 .code-viewer {
   margin-top: 18px;
-  min-height: 98px;
 }
 
 .code-source {
@@ -506,6 +505,7 @@ pre code {
   padding: 12px 14px;
   color: var(--code-text);
   font: 0.92rem/1.55 Consolas, "Cascadia Mono", "SFMono-Regular", monospace;
+  overflow: hidden;
   resize: vertical;
 }
 

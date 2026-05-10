@@ -389,6 +389,7 @@ function initFallbackEditor(lab) {
   source.style.display = "block";
   source.classList.add("code-editor");
   source.readOnly = container.dataset.readonly === "true";
+  autoSizeTextarea(source);
   container.remove();
 }
 
@@ -398,17 +399,51 @@ function initFallbackCodeViewer(container) {
   source.style.display = "block";
   source.classList.add("code-editor", "code-viewer");
   source.readOnly = true;
+  autoSizeTextarea(source);
   container.remove();
 }
 
-function setViewerHeight(container, source) {
-  const lineCount = source.value.split("\n").length;
+function autoSizeTextarea(textarea) {
+  textarea.style.height = "auto";
+  textarea.style.height = `${textarea.scrollHeight + 2}px`;
+  textarea.addEventListener("input", () => {
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight + 2}px`;
+  });
+}
 
-  container.style.minHeight = `${lineCount * 20 + 38}px`;
+function autoSizeMonacoEditor(editor, container) {
+  let resizeFrame = null;
+
+  const updateHeight = () => {
+    resizeFrame = null;
+    const contentHeight = Math.ceil(editor.getContentHeight());
+
+    container.style.height = `${contentHeight + 2}px`;
+    editor.layout({ width: container.clientWidth, height: contentHeight });
+  };
+
+  const scheduleUpdate = () => {
+    if (resizeFrame !== null) {
+      return;
+    }
+
+    resizeFrame = window.requestAnimationFrame(updateHeight);
+  };
+
+  editor.onDidContentSizeChange(updateHeight);
+
+  if ("ResizeObserver" in window) {
+    const resizeObserver = new ResizeObserver(scheduleUpdate);
+
+    resizeObserver.observe(container);
+  }
+
+  scheduleUpdate();
 }
 
 function createMonacoEditor(monaco, container, source, options = {}) {
-  return monaco.editor.create(container, {
+  const editor = monaco.editor.create(container, {
     value: source.value,
     language: "python",
     theme: getEditorTheme(),
@@ -422,6 +457,10 @@ function createMonacoEditor(monaco, container, source, options = {}) {
     wordWrap: "on",
     ...options,
   });
+
+  autoSizeMonacoEditor(editor, container);
+
+  return editor;
 }
 
 codeLabs.forEach((lab) => {
@@ -438,7 +477,6 @@ if (codeLabs.length || codeViewers.length) {
       codeViewers.forEach((container) => {
         const source = container.nextElementSibling;
 
-        setViewerHeight(container, source);
         createMonacoEditor(monaco, container, source, {
           domReadOnly: true,
           lineNumbersMinChars: 3,
