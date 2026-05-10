@@ -412,6 +412,16 @@ pre code {
   line-height: 1.2;
 }
 
+.code-editor-frame {
+  position: relative;
+  min-width: 0;
+  margin-top: 18px;
+}
+
+.code-lab .code-editor-frame {
+  margin-top: 0;
+}
+
 .run-button,
 .copy-code-button,
 .code-input-submit {
@@ -430,10 +440,27 @@ pre code {
 }
 
 .code-lab-actions {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
   display: flex;
   flex: 0 0 auto;
   align-items: center;
   gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  transform: translateY(-4px);
+}
+
+.code-editor-frame:hover .code-lab-actions,
+.code-editor-frame:focus-within .code-lab-actions {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .run-button {
@@ -501,7 +528,7 @@ pre code {
 }
 
 .code-viewer {
-  margin-top: 18px;
+  margin-top: 0;
 }
 
 .code-source {

@@ -10,6 +10,17 @@ const codeLabs = document.querySelectorAll("[data-code-lab]");
 const codeViewers = document.querySelectorAll("[data-code-viewer]");
 const mobileSidebarQuery = window.matchMedia("(max-width: 820px)");
 const sectionById = new Map(Array.from(lessonSections, (section) => [section.id, section]));
+const copyIconSvg = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" />
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+  </svg>
+`;
+const checkIconSvg = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m5 12 5 5L20 7" />
+  </svg>
+`;
 let scrollTicking = false;
 let pyodideReadyPromise;
 let monacoReadyPromise;
@@ -290,6 +301,22 @@ function getCodeLabCode(lab) {
   return editor ? editor.getValue() : source.value;
 }
 
+function getCopyButtonCode(copyButton) {
+  const frame = copyButton.closest(".code-editor-frame");
+  const editorContainer = frame?.querySelector(".code-editor");
+  const source =
+    frame?.querySelector(".code-source") ||
+    (frame?.nextElementSibling?.matches(".code-source")
+      ? frame.nextElementSibling
+      : copyButton.closest("[data-code-lab]")?.querySelector(".code-source"));
+
+  if (editorContainer?.editor) {
+    return editorContainer.editor.getValue();
+  }
+
+  return source?.value || "";
+}
+
 function setRunButtonBusy(runButton, isBusy) {
   runButton.disabled = isBusy;
   runButton.setAttribute("aria-busy", String(isBusy));
@@ -299,17 +326,18 @@ function setCopyButtonCopied(copyButton) {
   const originalLabel = copyButton.getAttribute("aria-label");
 
   copyButton.setAttribute("aria-label", "Код скопирован");
+  copyButton.innerHTML = checkIconSvg;
   copyButton.classList.add("is-copied");
 
   window.setTimeout(() => {
     copyButton.setAttribute("aria-label", originalLabel || "Скопировать код");
+    copyButton.innerHTML = copyIconSvg;
     copyButton.classList.remove("is-copied");
   }, 1200);
 }
 
-async function copyCodeLab(lab) {
-  const copyButton = lab.querySelector(".copy-code-button");
-  const code = getCodeLabCode(lab);
+async function copyCode(copyButton) {
+  const code = getCopyButtonCode(copyButton);
 
   try {
     await navigator.clipboard.writeText(code);
@@ -397,17 +425,18 @@ function initFallbackEditor(lab) {
   source.classList.add("code-editor");
   source.readOnly = container.dataset.readonly === "true";
   autoSizeTextarea(source);
-  container.remove();
+  container.replaceWith(source);
 }
 
 function initFallbackCodeViewer(container) {
-  const source = container.nextElementSibling;
+  const frame = container.closest(".code-editor-frame");
+  const source = frame?.nextElementSibling;
 
   source.style.display = "block";
   source.classList.add("code-editor", "code-viewer");
   source.readOnly = true;
   autoSizeTextarea(source);
-  container.remove();
+  container.replaceWith(source);
 }
 
 function autoSizeTextarea(textarea) {
@@ -460,6 +489,10 @@ function createMonacoEditor(monaco, container, source, options = {}) {
     padding: { top: 12, bottom: 12 },
     readOnly: container.dataset.readonly === "true",
     scrollBeyondLastLine: false,
+    scrollbar: {
+      alwaysConsumeMouseWheel: false,
+      handleMouseWheel: false,
+    },
     tabSize: 4,
     wordWrap: "on",
     ...options,
@@ -467,6 +500,7 @@ function createMonacoEditor(monaco, container, source, options = {}) {
 
   autoSizeMonacoEditor(editor, container);
   monacoEditors.add(editor);
+  container.editor = editor;
 
   return editor;
 }
@@ -477,20 +511,21 @@ window.addEventListener("resize", () => {
 
 codeLabs.forEach((lab) => {
   const runButton = lab.querySelector(".run-button");
-  const copyButton = lab.querySelector(".copy-code-button");
 
   runButton.addEventListener("click", () => runCodeLab(lab));
-  copyButton.addEventListener("click", () => copyCodeLab(lab));
+});
+
+document.querySelectorAll(".copy-code-button").forEach((copyButton) => {
+  copyButton.addEventListener("click", () => copyCode(copyButton));
 });
 
 if (codeLabs.length || codeViewers.length) {
   getMonaco()
     .then((monaco) => {
       codeViewers.forEach((container) => {
-        const source = container.nextElementSibling;
+        const source = container.closest(".code-editor-frame")?.nextElementSibling;
 
         createMonacoEditor(monaco, container, source, {
-          domReadOnly: true,
           lineNumbersMinChars: 3,
           readOnly: true,
         });
