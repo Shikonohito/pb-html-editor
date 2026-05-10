@@ -7,6 +7,7 @@ const lessonSections = document.querySelectorAll(".lesson-section");
 const quizOptions = document.querySelectorAll(".quiz-option");
 const quizInputForms = document.querySelectorAll(".quiz-input-form");
 const codeLabs = document.querySelectorAll("[data-code-lab]");
+const codeViewers = document.querySelectorAll("[data-code-viewer]");
 const mobileSidebarQuery = window.matchMedia("(max-width: 820px)");
 const sectionById = new Map(Array.from(lessonSections, (section) => [section.id, section]));
 let scrollTicking = false;
@@ -157,7 +158,7 @@ quizInputForms.forEach((form) => {
 });
 
 function getEditorTheme() {
-  return document.body.classList.contains("theme-light") ? "vs" : "vs-dark";
+  return "vs-dark";
 }
 
 function updateEditorThemes() {
@@ -275,17 +276,61 @@ async function collectQueuedInput(output, code) {
   return values;
 }
 
+function getCodeLabCode(lab) {
+  const editor = lab.editor;
+  const source = lab.querySelector(".code-source");
+
+  return editor ? editor.getValue() : source.value;
+}
+
+function setRunButtonBusy(runButton, isBusy) {
+  runButton.disabled = isBusy;
+  runButton.setAttribute("aria-busy", String(isBusy));
+}
+
+function setCopyButtonCopied(copyButton) {
+  const originalLabel = copyButton.getAttribute("aria-label");
+
+  copyButton.setAttribute("aria-label", "Код скопирован");
+  copyButton.classList.add("is-copied");
+
+  window.setTimeout(() => {
+    copyButton.setAttribute("aria-label", originalLabel || "Скопировать код");
+    copyButton.classList.remove("is-copied");
+  }, 1200);
+}
+
+async function copyCodeLab(lab) {
+  const copyButton = lab.querySelector(".copy-code-button");
+  const code = getCodeLabCode(lab);
+
+  try {
+    await navigator.clipboard.writeText(code);
+    setCopyButtonCopied(copyButton);
+  } catch {
+    const copyArea = document.createElement("textarea");
+
+    copyArea.value = code;
+    copyArea.setAttribute("readonly", "");
+    copyArea.style.position = "fixed";
+    copyArea.style.inset = "0 auto auto 0";
+    copyArea.style.opacity = "0";
+    document.body.append(copyArea);
+    copyArea.select();
+    document.execCommand("copy");
+    copyArea.remove();
+    setCopyButtonCopied(copyButton);
+  }
+}
+
 async function runCodeLab(lab) {
   const runButton = lab.querySelector(".run-button");
   const output = lab.querySelector(".code-output");
-  const editor = lab.editor;
-  const source = lab.querySelector(".code-source");
-  const code = editor ? editor.getValue() : source.value;
+  const code = getCodeLabCode(lab);
 
   output.className = "code-output";
   output.textContent = "";
-  runButton.disabled = true;
-  runButton.textContent = "Запуск...";
+  setRunButtonBusy(runButton, true);
 
   try {
     if (!window.loadPyodide) {
@@ -333,8 +378,7 @@ ${prepareInteractiveCode(code)}
     output.classList.add("is-error");
     appendOutput(output, `${error.message || error}\n`);
   } finally {
-    runButton.disabled = false;
-    runButton.textContent = "Запустить";
+    setRunButtonBusy(runButton, false);
   }
 }
 
@@ -344,36 +388,73 @@ function initFallbackEditor(lab) {
 
   source.style.display = "block";
   source.classList.add("code-editor");
+  source.readOnly = container.dataset.readonly === "true";
   container.remove();
+}
+
+function initFallbackCodeViewer(container) {
+  const source = container.nextElementSibling;
+
+  source.style.display = "block";
+  source.classList.add("code-editor", "code-viewer");
+  source.readOnly = true;
+  container.remove();
+}
+
+function setViewerHeight(container, source) {
+  const lineCount = source.value.split("\n").length;
+
+  container.style.minHeight = `${lineCount * 20 + 38}px`;
+}
+
+function createMonacoEditor(monaco, container, source, options = {}) {
+  return monaco.editor.create(container, {
+    value: source.value,
+    language: "python",
+    theme: getEditorTheme(),
+    automaticLayout: true,
+    fontSize: 14,
+    minimap: { enabled: false },
+    padding: { top: 12, bottom: 12 },
+    readOnly: container.dataset.readonly === "true",
+    scrollBeyondLastLine: false,
+    tabSize: 4,
+    wordWrap: "on",
+    ...options,
+  });
 }
 
 codeLabs.forEach((lab) => {
   const runButton = lab.querySelector(".run-button");
+  const copyButton = lab.querySelector(".copy-code-button");
 
   runButton.addEventListener("click", () => runCodeLab(lab));
+  copyButton.addEventListener("click", () => copyCodeLab(lab));
 });
 
-if (codeLabs.length) {
+if (codeLabs.length || codeViewers.length) {
   getMonaco()
     .then((monaco) => {
+      codeViewers.forEach((container) => {
+        const source = container.nextElementSibling;
+
+        setViewerHeight(container, source);
+        createMonacoEditor(monaco, container, source, {
+          domReadOnly: true,
+          lineNumbersMinChars: 3,
+          readOnly: true,
+        });
+      });
+
       codeLabs.forEach((lab) => {
         const container = lab.querySelector(".code-editor");
         const source = lab.querySelector(".code-source");
 
-        lab.editor = monaco.editor.create(container, {
-          value: source.value,
-          language: "python",
-          theme: getEditorTheme(),
-          automaticLayout: true,
-          fontSize: 14,
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          tabSize: 4,
-          wordWrap: "on",
-        });
+        lab.editor = createMonacoEditor(monaco, container, source);
       });
     })
     .catch(() => {
+      codeViewers.forEach(initFallbackCodeViewer);
       codeLabs.forEach(initFallbackEditor);
     });
 }

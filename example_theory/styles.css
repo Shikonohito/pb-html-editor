@@ -411,12 +411,13 @@ pre code {
 }
 
 .run-button,
+.copy-code-button,
 .code-input-submit {
   min-height: 42px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--accent);
-  color: #15120a;
+  background: var(--surface-strong);
+  color: var(--text);
   cursor: pointer;
   font: inherit;
   font-weight: 900;
@@ -426,22 +427,65 @@ pre code {
     transform 160ms ease;
 }
 
-.run-button {
+.code-lab-actions {
+  display: flex;
   flex: 0 0 auto;
-  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+}
+
+.run-button {
+  color: color-mix(in srgb, var(--feedback-correct) 78%, #0c5f3a);
+}
+
+.run-button,
+.copy-code-button {
+  display: inline-grid;
+  width: 48px;
+  place-items: center;
+  padding: 0;
+}
+
+.run-button svg,
+.copy-code-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.run-button svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  stroke: none;
 }
 
 .run-button:hover,
+.copy-code-button:hover,
 .code-input-submit:hover {
   transform: translateY(-1px);
-  filter: brightness(1.05);
+  border-color: var(--accent);
 }
 
 .run-button:disabled,
+.copy-code-button:disabled,
 .code-input-submit:disabled {
   cursor: progress;
   filter: saturate(0.7);
   opacity: 0.76;
+}
+
+.copy-code-button.is-copied {
+  border-color: var(--feedback-correct);
+  color: var(--feedback-correct);
+}
+
+.code-input-submit {
+  background: var(--accent);
+  color: #15120a;
 }
 
 .code-editor {
@@ -452,8 +496,17 @@ pre code {
   background: var(--code-bg);
 }
 
+.code-viewer {
+  margin-top: 18px;
+  min-height: 98px;
+}
+
 .code-source {
   display: none;
+  padding: 12px 14px;
+  color: var(--code-text);
+  font: 0.92rem/1.55 Consolas, "Cascadia Mono", "SFMono-Regular", monospace;
+  resize: vertical;
 }
 
 .code-output {
@@ -736,7 +789,6 @@ pre code {
     align-items: stretch;
   }
 
-  .run-button,
   .code-input-submit {
     width: 100%;
   }

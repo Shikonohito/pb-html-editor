@@ -80,15 +80,28 @@
               Она помогает убрать повторение, разделить программу на понятные части и описывать
               действия через имена.
             </p>
-            <pre><code>def greet(name):
-    return f"Привет, {name}"</code></pre>
+            <div class="code-editor code-viewer" data-code-viewer aria-label="Пример Python-кода"></div>
+            <textarea class="code-source" aria-label="Исходный код примера">def greet(name):
+    return f"Привет, {name}"</textarea>
 
             <div class="code-lab" data-code-lab>
               <div class="code-lab-head">
                 <h3>Проверь функцию</h3>
-                <button type="button" class="run-button">Запустить</button>
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              <div class="code-editor" aria-label="Редактор Python-кода" data-readonly="true"></div>
               <textarea class="code-source" aria-label="Исходный код Python">def greet(name):
     return f"Привет, {name}"
 
@@ -112,10 +125,11 @@ print(greet(name))</textarea>
             <div class="quiz-block" aria-labelledby="argumentsQuizTitle">
               <div class="quiz-label">Вопрос по теме аргументов</div>
               <h3 id="argumentsQuizTitle">Что будет аргументом при вызове функции?</h3>
-              <pre><code>def show_city(city):
+              <div class="code-editor code-viewer" data-code-viewer aria-label="Пример Python-кода"></div>
+              <textarea class="code-source" aria-label="Исходный код примера">def show_city(city):
     return city
 
-show_city("Баку")</code></pre>
+show_city("Баку")</textarea>
 
               <div class="quiz-options" role="group" aria-label="Варианты ответа">
                 <div class="quiz-choice">
@@ -172,10 +186,11 @@ show_city("Баку")</code></pre>
             <div class="quiz-block" data-quiz-mode="multiple" aria-labelledby="argumentsMultiQuizTitle">
               <div class="quiz-label">Вопрос с несколькими ответами</div>
               <h3 id="argumentsMultiQuizTitle">Какие значения являются аргументами при вызове функции?</h3>
-              <pre><code>def greet(name, greeting="Привет"):
+              <div class="code-editor code-viewer" data-code-viewer aria-label="Пример Python-кода"></div>
+              <textarea class="code-source" aria-label="Исходный код примера">def greet(name, greeting="Привет"):
     return f"{greeting}, {name}"
 
-greet("Али", greeting="Салам")</code></pre>
+greet("Али", greeting="Салам")</textarea>
 
               <div class="quiz-options" role="group" aria-label="Варианты ответа с несколькими верными ответами">
                 <div class="quiz-choice">
@@ -244,11 +259,12 @@ greet("Али", greeting="Салам")</code></pre>
             <div class="quiz-block" aria-labelledby="scopeInputQuizTitle">
               <div class="quiz-label">Вопрос с вводом ответа</div>
               <h3 id="scopeInputQuizTitle">В какой области видимости Python сначала ищет переменную <code>message</code>?</h3>
-              <pre><code>message = "Глобальное значение"
+              <div class="code-editor code-viewer" data-code-viewer aria-label="Пример Python-кода"></div>
+              <textarea class="code-source" aria-label="Исходный код примера">message = "Глобальное значение"
 
 def show_message():
     message = "Локальное значение"
-    return message</code></pre>
+    return message</textarea>
 
               <form class="quiz-input-form" data-answer="local|локальная|локальной|локальная область|local scope">
                 <label for="scopeAnswer">Введите ответ</label>
@@ -289,7 +305,19 @@ def show_message():
             <div class="code-lab" data-code-lab>
               <div class="code-lab-head">
                 <h3>Проверь lambda</h3>
-                <button type="button" class="run-button">Запустить</button>
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="code-editor" aria-label="Редактор Python-кода"></div>
               <textarea class="code-source" aria-label="Исходный код Python">numbers = [1, 2, 3, 4, 5]
