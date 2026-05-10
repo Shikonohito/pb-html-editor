@@ -80,6 +80,52 @@
               Она помогает убрать повторение, разделить программу на понятные части и описывать
               действия через имена.
             </p>
+
+            <div class="theory-block theory-block-definition" aria-labelledby="functionDefinitionTitle">
+              <div class="theory-block-label">Определение термина</div>
+              <h3 id="functionDefinitionTitle">Функция</h3>
+              <p>
+                Это переиспользуемый фрагмент программы с именем, входными данными и результатом.
+                В Python функция создается через <code>def</code>, а вызывается по имени со скобками.
+              </p>
+            </div>
+
+            <div class="theory-block theory-block-important" aria-labelledby="functionImportantTitle">
+              <div class="theory-block-label">Важный момент</div>
+              <h3 id="functionImportantTitle">Одна функция - одна понятная задача</h3>
+              <p>
+                Если функция одновременно читает данные, считает результат и печатает отчет,
+                ее сложнее проверять и менять. Лучше разделять такие действия на несколько функций.
+              </p>
+            </div>
+
+            <div class="theory-block theory-block-hint" aria-labelledby="functionHintTitle">
+              <div class="theory-block-label">Подсказка</div>
+              <h3 id="functionHintTitle">Называйте функцию действием</h3>
+              <p>
+                Имя вроде <code>calculate_total()</code> или <code>format_name()</code> сразу
+                объясняет, что делает код, поэтому вызов функции читается почти как предложение.
+              </p>
+            </div>
+
+            <div class="theory-block theory-block-correct" aria-labelledby="functionCorrectTitle">
+              <div class="theory-block-label">Верный подход</div>
+              <h3 id="functionCorrectTitle">Возвращайте значение через <code>return</code></h3>
+              <p>
+                Когда функция возвращает результат, его можно сохранить, проверить в тесте или
+                передать в другую функцию без привязки к выводу на экран.
+              </p>
+            </div>
+
+            <div class="theory-block theory-block-incorrect" aria-labelledby="functionIncorrectTitle">
+              <div class="theory-block-label">Неверный подход</div>
+              <h3 id="functionIncorrectTitle">Не прячьте результат только в <code>print()</code></h3>
+              <p>
+                <code>print()</code> показывает текст пользователю, но не возвращает данные в программу.
+                Из-за этого результат сложнее использовать повторно.
+              </p>
+            </div>
+
             <div class="code-editor-frame">
               <div class="code-lab-actions">
                 <button type="button" class="copy-code-button" aria-label="Скопировать код">

@@ -8,6 +8,7 @@
   --line: #3b414c;
   --accent: #ffb703;
   --accent-2: #4cc9f0;
+  --quiz-accent: #b892ff;
   --code-bg: #08090d;
   --code-text: #fff2b8;
   --feedback-correct: #3ddc97;
@@ -46,6 +47,7 @@ body.theme-light {
   --line: #d8d1c4;
   --accent: #b77900;
   --accent-2: #047891;
+  --quiz-accent: #7c3aed;
   --code-bg: #111318;
   --code-text: #fff2b8;
   --feedback-correct: #126c43;
@@ -593,22 +595,76 @@ pre code {
   padding: 0 14px;
 }
 
+.theory-block {
+  --block-accent: var(--accent-2);
+  --block-tint: 8%;
+  min-width: 0;
+  margin-top: 18px;
+  padding: clamp(16px, 2.4vw, 24px);
+  border: 1px solid color-mix(in srgb, var(--block-accent) 62%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--block-accent) var(--block-tint), var(--surface));
+}
+
+.theory-block-definition {
+  --block-accent: #4cc9f0;
+}
+
+.theory-block-important {
+  --block-accent: #ffb703;
+  --block-tint: 10%;
+}
+
+.theory-block-hint {
+  --block-accent: #9bdb7f;
+}
+
+.theory-block-correct {
+  --block-accent: #3ddc97;
+}
+
+.theory-block-incorrect {
+  --block-accent: #ff8a8a;
+}
+
+.theory-block-label {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 5px 9px;
+  border: 1px solid color-mix(in srgb, var(--block-accent) 48%, transparent);
+  border-radius: 8px;
+  color: var(--block-accent);
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.theory-block h3 {
+  margin: 0;
+  font-size: clamp(1.08rem, 1.5vw, 1.35rem);
+  line-height: 1.25;
+}
+
+.lesson-section .theory-block p {
+  margin-top: 10px;
+}
+
 .quiz-block {
   min-width: 0;
   margin-top: 24px;
   padding: clamp(16px, 2.4vw, 24px);
-  border: 1px solid color-mix(in srgb, var(--accent-2) 62%, var(--line));
+  border: 1px solid color-mix(in srgb, var(--quiz-accent) 62%, var(--line));
   border-radius: 8px;
-  background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+  background: color-mix(in srgb, var(--quiz-accent) 8%, var(--surface));
 }
 
 .quiz-label {
   display: inline-flex;
   margin-bottom: 10px;
   padding: 5px 9px;
-  border: 1px solid color-mix(in srgb, var(--accent-2) 48%, transparent);
+  border: 1px solid color-mix(in srgb, var(--quiz-accent) 48%, transparent);
   border-radius: 8px;
-  color: var(--accent-2);
+  color: var(--quiz-accent);
   font-size: 0.74rem;
   font-weight: 900;
   text-transform: uppercase;
