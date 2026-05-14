@@ -21,6 +21,12 @@ const checkIconSvg = `
     <path d="m5 12 5 5L20 7" />
   </svg>
 `;
+const resetIconSvg = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 12a9 9 0 1 0 3-6.7" />
+    <path d="M3 4v6h6" />
+  </svg>
+`;
 let scrollTicking = false;
 let pyodideReadyPromise;
 let monacoReadyPromise;
@@ -322,6 +328,53 @@ function setRunButtonBusy(runButton, isBusy) {
   runButton.setAttribute("aria-busy", String(isBusy));
 }
 
+function getPresetCode(source) {
+  return source?.dataset.initialCode ?? source?.value ?? "";
+}
+
+function isEditableCodeLab(lab) {
+  return lab.querySelector(".code-editor")?.dataset.readonly !== "true";
+}
+
+function addResetCodeButton(lab) {
+  if (!isEditableCodeLab(lab)) {
+    return;
+  }
+
+  const actions = lab.querySelector(".code-lab-actions");
+
+  if (!actions || actions.querySelector(".reset-code-button")) {
+    return;
+  }
+
+  const resetButton = document.createElement("button");
+
+  resetButton.type = "button";
+  resetButton.className = "reset-code-button";
+  resetButton.setAttribute("aria-label", "Сбросить код");
+  resetButton.innerHTML = resetIconSvg;
+  actions.prepend(resetButton);
+  resetButton.addEventListener("click", () => resetCodeLab(lab));
+}
+
+function resetCodeLab(lab) {
+  const source = lab.querySelector(".code-source");
+  const presetCode = getPresetCode(source);
+  const editorContainer = lab.querySelector(".code-editor");
+
+  if (editorContainer?.editor) {
+    editorContainer.editor.setValue(presetCode);
+    editorContainer.editor.focus();
+    return;
+  }
+
+  if (source) {
+    source.value = presetCode;
+    source.dispatchEvent(new Event("input", { bubbles: true }));
+    source.focus();
+  }
+}
+
 function setCopyButtonCopied(copyButton) {
   const originalLabel = copyButton.getAttribute("aria-label");
 
@@ -511,8 +564,14 @@ window.addEventListener("resize", () => {
 
 codeLabs.forEach((lab) => {
   const runButton = lab.querySelector(".run-button");
+  const source = lab.querySelector(".code-source");
+
+  if (source) {
+    source.dataset.initialCode = source.value;
+  }
 
   runButton.addEventListener("click", () => runCodeLab(lab));
+  addResetCodeButton(lab);
 });
 
 document.querySelectorAll(".copy-code-button").forEach((copyButton) => {

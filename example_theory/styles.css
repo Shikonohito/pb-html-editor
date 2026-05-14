@@ -425,6 +425,7 @@ pre code {
 }
 
 .run-button,
+.reset-code-button,
 .copy-code-button,
 .code-input-submit {
   min-height: 42px;
@@ -470,6 +471,7 @@ pre code {
 }
 
 .run-button,
+.reset-code-button,
 .copy-code-button {
   display: inline-grid;
   width: 48px;
@@ -478,6 +480,7 @@ pre code {
 }
 
 .run-button svg,
+.reset-code-button svg,
 .copy-code-button svg {
   width: 20px;
   height: 20px;
@@ -495,6 +498,7 @@ pre code {
 }
 
 .run-button:hover,
+.reset-code-button:hover,
 .copy-code-button:hover,
 .code-input-submit:hover {
   transform: translateY(-1px);
