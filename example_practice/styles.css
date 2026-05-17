@@ -591,6 +591,14 @@ a {
   color: var(--feedback-correct);
 }
 
+body.theme-light .code-output.is-error {
+  color: color-mix(in srgb, var(--feedback-incorrect) 78%, white);
+}
+
+body.theme-light .code-output.is-success {
+  color: color-mix(in srgb, var(--feedback-correct) 78%, white);
+}
+
 @media (max-width: 820px) {
   :root {
     --header-height: 76px;
@@ -616,7 +624,7 @@ a {
   }
 
   .topbar-tasks {
-    gap: 6px;
+    display: none;
   }
 
   .task-jump {
