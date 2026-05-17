@@ -491,12 +491,9 @@ a {
   transform: translateY(0);
 }
 
-.run-button {
-  color: color-mix(in srgb, var(--feedback-correct) 78%, #0c5f3a);
-}
-
+.run-button,
 .check-button {
-  color: var(--accent);
+  color: color-mix(in srgb, var(--feedback-correct) 78%, #0c5f3a);
 }
 
 .run-button,
@@ -517,6 +514,7 @@ a {
   height: 20px;
   fill: none;
   stroke: currentColor;
+  stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2;
 }
@@ -524,8 +522,8 @@ a {
 .run-button svg {
   width: 24px;
   height: 24px;
-  fill: currentColor;
-  stroke: none;
+  fill: none;
+  stroke: currentColor;
 }
 
 .run-button:hover,

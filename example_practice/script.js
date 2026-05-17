@@ -388,7 +388,10 @@ function resetCodeLab(lab) {
     source.focus();
   }
 
-  lab.querySelector(".code-output").textContent = "";
+  const output = lab.querySelector(".code-output");
+
+  output.className = "code-output";
+  output.textContent = "";
   updateTaskStatus(section.id, "pending");
 }
 

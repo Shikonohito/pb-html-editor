@@ -486,6 +486,7 @@ pre code {
   height: 20px;
   fill: none;
   stroke: currentColor;
+  stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2;
 }
@@ -493,8 +494,8 @@ pre code {
 .run-button svg {
   width: 24px;
   height: 24px;
-  fill: currentColor;
-  stroke: none;
+  fill: none;
+  stroke: currentColor;
 }
 
 .run-button:hover,
