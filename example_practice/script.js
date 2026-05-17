@@ -2,8 +2,8 @@ const appShell = document.querySelector("#appShell");
 const sidebarToggle = document.querySelector("#sidebarToggle");
 const innerToggle = document.querySelector("#innerToggle");
 const themeToggle = document.querySelector("#themeToggle");
-const tocItems = document.querySelectorAll(".toc-item");
-const taskButtons = document.querySelectorAll(".task-jump");
+let tocItems = document.querySelectorAll(".toc-item");
+let taskButtons = document.querySelectorAll(".task-jump");
 const taskSections = document.querySelectorAll(".task-section");
 const codeLabs = document.querySelectorAll("[data-code-lab]");
 const mobileSidebarQuery = window.matchMedia("(max-width: 820px)");
@@ -30,9 +30,64 @@ const resetIconSvg = `
     <path d="M5 4v4h4" />
   </svg>
 `;
+const taskIconSvg = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 5h16v14H4z" />
+    <path d="m8 9 3 3-3 3" />
+    <path d="M13 15h4" />
+  </svg>
+`;
 let pyodideReadyPromise;
 let monacoReadyPromise;
 const monacoEditors = new Set();
+
+function formatTaskNumber(index) {
+  return String(index + 1).padStart(2, "0");
+}
+
+function syncTaskNavigation() {
+  const tocList = document.querySelector(".toc-list");
+  const topbarTasks = document.querySelector(".topbar-tasks");
+
+  if (!tocList || !topbarTasks) {
+    return;
+  }
+
+  tocList.textContent = "";
+  topbarTasks.textContent = "";
+
+  taskSections.forEach((section, index) => {
+    const number = formatTaskNumber(index);
+    const title = section.dataset.taskTitle || `Задание ${index + 1}`;
+    const name = section.dataset.taskName || title;
+    const isCurrent = section.classList.contains("active");
+
+    const tocItem = document.createElement("a");
+    tocItem.className = `toc-item${isCurrent ? " current" : ""}`;
+    tocItem.href = `#${section.id}`;
+    tocItem.dataset.status = "pending";
+    if (isCurrent) {
+      tocItem.setAttribute("aria-current", "location");
+    }
+    tocItem.innerHTML = `<span>${number}</span><strong>${name}</strong><em>${statusLabels.pending}</em>`;
+    tocList.append(tocItem);
+
+    const taskButton = document.createElement("button");
+    taskButton.className = `task-jump${isCurrent ? " current" : ""}`;
+    taskButton.type = "button";
+    taskButton.dataset.taskTarget = section.id;
+    taskButton.dataset.status = "pending";
+    taskButton.setAttribute("aria-label", `${title}: ${statusLabels.pending}`);
+    if (isCurrent) {
+      taskButton.setAttribute("aria-current", "true");
+    }
+    taskButton.innerHTML = `${taskIconSvg}<span class="status-dot" aria-hidden="true"></span>`;
+    topbarTasks.append(taskButton);
+  });
+
+  tocItems = document.querySelectorAll(".toc-item");
+  taskButtons = document.querySelectorAll(".task-jump");
+}
 
 function setSidebar(open) {
   appShell.classList.toggle("sidebar-collapsed", !open);
@@ -98,6 +153,8 @@ function updateTaskStatus(sectionId, status) {
 
 sidebarToggle.addEventListener("click", toggleSidebar);
 innerToggle.addEventListener("click", toggleSidebar);
+
+syncTaskNavigation();
 
 tocItems.forEach((item) => {
   item.addEventListener("click", (event) => {
@@ -279,39 +336,70 @@ function getTaskTests(lab) {
 
 function buildCheckScript(code, tests) {
   return `
+import builtins
+import contextlib
+import io
 import json
 import traceback
 
 user_code = ${JSON.stringify(code)}
 tests = json.loads(${JSON.stringify(JSON.stringify(tests))})
-namespace = {}
 results = []
 
-try:
-    exec(user_code, namespace)
-    for test in tests:
-        try:
-            actual = eval(test["expression"], namespace)
-            results.append({
-                "expression": test["expression"],
-                "actual": actual,
-                "expected": test["expected"],
-                "passed": actual == test["expected"],
-            })
-        except Exception:
-            results.append({
-                "expression": test["expression"],
-                "actual": traceback.format_exc(limit=1).strip(),
-                "expected": test["expected"],
-                "passed": False,
-            })
-except Exception:
-    results.append({
-        "expression": "запуск решения",
-        "actual": traceback.format_exc(limit=1).strip(),
-        "expected": "код без ошибок",
-        "passed": False,
-    })
+def make_input(stdin, output):
+    lines = stdin.splitlines()
+    index = 0
+
+    def fake_input(prompt=""):
+        nonlocal index
+        output.write(str(prompt))
+        if index >= len(lines):
+            raise EOFError("input exhausted")
+        value = lines[index]
+        index += 1
+        return value
+
+    return fake_input
+
+def to_json_safe(value):
+    try:
+        json.dumps(value, ensure_ascii=False)
+        return value
+    except TypeError:
+        return repr(value)
+
+for test in tests:
+    namespace = {}
+    output = io.StringIO()
+    original_input = builtins.input
+    builtins.input = make_input(test.get("stdin", ""), output)
+
+    try:
+        with contextlib.redirect_stdout(output):
+            exec(user_code, namespace)
+            if "setup" in test:
+                exec(test["setup"], namespace)
+            if "expression" in test:
+                actual = eval(test["expression"], namespace)
+            else:
+                actual = output.getvalue().strip()
+
+        expected = test["expected"]
+        results.append({
+            "expression": test.get("expression", "запуск с вводом"),
+            "actual": to_json_safe(actual),
+            "expected": expected,
+            "passed": actual == expected,
+        })
+    except Exception:
+        results.append({
+            "expression": test.get("expression", "запуск решения"),
+            "actual": traceback.format_exc(limit=1).strip(),
+            "expected": test["expected"],
+            "passed": False,
+        })
+    finally:
+        builtins.input = original_input
 
 json.dumps(results, ensure_ascii=False)
 `;

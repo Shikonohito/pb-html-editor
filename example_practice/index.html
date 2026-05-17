@@ -323,6 +323,279 @@
               <div class="code-output" aria-live="polite"></div>
             </div>
           </section>
+
+          <section id="two-inputs" class="task-section" data-task-title="Задание 5" data-task-name="Два ввода">
+            <div class="section-heading">
+              <span>05</span>
+              <h2>Два ввода подряд</h2>
+            </div>
+            <p>
+              Напишите программу, которая делает два последовательных ввода: имя и возраст.
+              После этого программа должна вывести одну строку в формате <code>{имя}: {возраст}</code>.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Решение</h3>
+              </div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.87a1 1 0 0 1 1.5-.87l12 7.13a1 1 0 0 1 0 1.74l-12 7.13A1 1 0 0 1 6 18.13V3.87Z" /></svg></button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" /></svg></button>
+                  <button type="button" class="check-button" aria-label="Проверить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 2 1.88 1.88" /><path d="M14.12 3.88 16 2" /><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /><path d="M12 20v-9" /><path d="M6.53 9C4.6 8.8 3 7.1 3 5" /><path d="M6 13H2" /><path d="M3 21c0-2.1 1.7-3.9 3.8-4" /><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /><path d="M22 13h-4" /><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" /></svg></button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="twoInputsCode" aria-label="Исходный код Python">name = input()
+age = input()
+print(f"{name}: {age}")</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "stdin": "Али\n15", "expected": "Али: 15" },
+                  { "stdin": "Лейла\n18", "expected": "Лейла: 18" }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="sum-loop" class="task-section" data-task-title="Задание 6" data-task-name="Цикличный ввод">
+            <div class="section-heading">
+              <span>06</span>
+              <h2>Цикличный ввод</h2>
+            </div>
+            <p>
+              Запрашивайте числа в цикле с подсказкой <code>Введите число N: </code>, где
+              <code>N</code> — номер ввода. Цикл должен завершиться, когда пользователь введет
+              пустую строку. После цикла выведите сумму введенных чисел.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Решение</h3>
+              </div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.87a1 1 0 0 1 1.5-.87l12 7.13a1 1 0 0 1 0 1.74l-12 7.13A1 1 0 0 1 6 18.13V3.87Z" /></svg></button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" /></svg></button>
+                  <button type="button" class="check-button" aria-label="Проверить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 2 1.88 1.88" /><path d="M14.12 3.88 16 2" /><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /><path d="M12 20v-9" /><path d="M6.53 9C4.6 8.8 3 7.1 3 5" /><path d="M6 13H2" /><path d="M3 21c0-2.1 1.7-3.9 3.8-4" /><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /><path d="M22 13h-4" /><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" /></svg></button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="sumLoopCode" aria-label="Исходный код Python">total = 0
+number = 1
+
+while True:
+    value = input(f"Введите число {number}: ")
+    if value == "":
+        break
+    total += int(value)
+    number += 1
+
+print(total)</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "stdin": "2\n3\n5\n\n", "expected": "Введите число 1: Введите число 2: Введите число 3: Введите число 4: 10" },
+                  { "stdin": "7\n-2\n\n", "expected": "Введите число 1: Введите число 2: Введите число 3: 5" }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="console-menu" class="task-section" data-task-title="Задание 7" data-task-name="Меню">
+            <div class="section-heading">
+              <span>07</span>
+              <h2>Консольное меню</h2>
+            </div>
+            <p>
+              Реализуйте консольное меню из трех пунктов. Покажите пункты <code>1. Открыть</code>,
+              <code>2. Сохранить</code>, <code>3. Выйти</code>, запросите выбор и выведите действие
+              для выбранного пункта.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Решение</h3>
+              </div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.87a1 1 0 0 1 1.5-.87l12 7.13a1 1 0 0 1 0 1.74l-12 7.13A1 1 0 0 1 6 18.13V3.87Z" /></svg></button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" /></svg></button>
+                  <button type="button" class="check-button" aria-label="Проверить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 2 1.88 1.88" /><path d="M14.12 3.88 16 2" /><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /><path d="M12 20v-9" /><path d="M6.53 9C4.6 8.8 3 7.1 3 5" /><path d="M6 13H2" /><path d="M3 21c0-2.1 1.7-3.9 3.8-4" /><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /><path d="M22 13h-4" /><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" /></svg></button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="consoleMenuCode" aria-label="Исходный код Python">print("1. Открыть")
+print("2. Сохранить")
+print("3. Выйти")
+
+choice = input("Выберите пункт: ")
+
+if choice == "1":
+    print("Открыть")
+elif choice == "2":
+    print("Сохранить")
+elif choice == "3":
+    print("Выйти")</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "stdin": "1", "expected": "1. Открыть\n2. Сохранить\n3. Выйти\nВыберите пункт: Открыть" },
+                  { "stdin": "2", "expected": "1. Открыть\n2. Сохранить\n3. Выйти\nВыберите пункт: Сохранить" },
+                  { "stdin": "3", "expected": "1. Открыть\n2. Сохранить\n3. Выйти\nВыберите пункт: Выйти" }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="describe-function" class="task-section" data-task-title="Задание 8" data-task-name="Описать функцию">
+            <div class="section-heading">
+              <span>08</span>
+              <h2>Только описать функцию</h2>
+            </div>
+            <p>
+              Только опишите функцию <code>is_even(number)</code>. Она должна возвращать
+              <code>True</code>, если число четное, и <code>False</code> в остальных случаях.
+              Вызывать функцию и печатать результат не нужно.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head"><h3>Решение</h3></div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.87a1 1 0 0 1 1.5-.87l12 7.13a1 1 0 0 1 0 1.74l-12 7.13A1 1 0 0 1 6 18.13V3.87Z" /></svg></button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" /></svg></button>
+                  <button type="button" class="check-button" aria-label="Проверить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 2 1.88 1.88" /><path d="M14.12 3.88 16 2" /><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /><path d="M12 20v-9" /><path d="M6.53 9C4.6 8.8 3 7.1 3 5" /><path d="M6 13H2" /><path d="M3 21c0-2.1 1.7-3.9 3.8-4" /><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /><path d="M22 13h-4" /><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" /></svg></button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="describeFunctionCode" aria-label="Исходный код Python">def is_even(number):
+    return number % 2 == 0</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "is_even(8)", "expected": true },
+                  { "expression": "is_even(7)", "expected": false }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="use-function" class="task-section" data-task-title="Задание 9" data-task-name="Использовать функцию">
+            <div class="section-heading">
+              <span>09</span>
+              <h2>Только использовать функцию</h2>
+            </div>
+            <p>
+              Функция <code>add_discount(price)</code> уже описана. Опишите функцию
+              <code>sale_price(price)</code>, которая только использует <code>add_discount</code>
+              и возвращает ее результат.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head"><h3>Решение</h3></div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.87a1 1 0 0 1 1.5-.87l12 7.13a1 1 0 0 1 0 1.74l-12 7.13A1 1 0 0 1 6 18.13V3.87Z" /></svg></button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" /></svg></button>
+                  <button type="button" class="check-button" aria-label="Проверить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 2 1.88 1.88" /><path d="M14.12 3.88 16 2" /><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /><path d="M12 20v-9" /><path d="M6.53 9C4.6 8.8 3 7.1 3 5" /><path d="M6 13H2" /><path d="M3 21c0-2.1 1.7-3.9 3.8-4" /><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /><path d="M22 13h-4" /><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" /></svg></button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="useFunctionCode" aria-label="Исходный код Python">def add_discount(price):
+    return price * 0.9
+
+def sale_price(price):
+    return add_discount(price)</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "sale_price(200)", "expected": 180 },
+                  { "setup": "add_discount = lambda price: price + 7", "expression": "sale_price(100)", "expected": 107 }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="describe-class" class="task-section" data-task-title="Задание 10" data-task-name="Описать класс">
+            <div class="section-heading">
+              <span>10</span>
+              <h2>Только описать класс</h2>
+            </div>
+            <p>
+              Только опишите класс <code>Product</code>. Конструктор должен принимать
+              <code>name</code> и <code>price</code>, сохранять их в свойства, а метод
+              <code>label()</code> должен возвращать строку <code>{name}: {price}</code>.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head"><h3>Решение</h3></div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.87a1 1 0 0 1 1.5-.87l12 7.13a1 1 0 0 1 0 1.74l-12 7.13A1 1 0 0 1 6 18.13V3.87Z" /></svg></button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" /></svg></button>
+                  <button type="button" class="check-button" aria-label="Проверить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 2 1.88 1.88" /><path d="M14.12 3.88 16 2" /><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /><path d="M12 20v-9" /><path d="M6.53 9C4.6 8.8 3 7.1 3 5" /><path d="M6 13H2" /><path d="M3 21c0-2.1 1.7-3.9 3.8-4" /><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /><path d="M22 13h-4" /><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" /></svg></button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="describeClassCode" aria-label="Исходный код Python">class Product:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+    def label(self):
+        return f"{self.name}: {self.price}"</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "Product('Книга', 12).label()", "expected": "Книга: 12" },
+                  { "expression": "[Product('Ручка', 3).name, Product('Ручка', 3).price]", "expected": ["Ручка", 3] }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="use-class" class="task-section" data-task-title="Задание 11" data-task-name="Использовать класс">
+            <div class="section-heading">
+              <span>11</span>
+              <h2>Только использовать класс</h2>
+            </div>
+            <p>
+              Класс <code>Badge</code> уже описан. Опишите функцию <code>create_badge(name)</code>,
+              которая создает объект <code>Badge</code> и возвращает результат вызова его метода
+              <code>text()</code>.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head"><h3>Решение</h3></div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.87a1 1 0 0 1 1.5-.87l12 7.13a1 1 0 0 1 0 1.74l-12 7.13A1 1 0 0 1 6 18.13V3.87Z" /></svg></button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" /></svg></button>
+                  <button type="button" class="check-button" aria-label="Проверить код"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 2 1.88 1.88" /><path d="M14.12 3.88 16 2" /><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /><path d="M12 20v-9" /><path d="M6.53 9C4.6 8.8 3 7.1 3 5" /><path d="M6 13H2" /><path d="M3 21c0-2.1 1.7-3.9 3.8-4" /><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /><path d="M22 13h-4" /><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" /></svg></button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="useClassCode" aria-label="Исходный код Python">class Badge:
+    def __init__(self, name):
+        self.name = name
+
+    def text(self):
+        return f"Участник: {self.name}"
+
+def create_badge(name):
+    badge = Badge(name)
+    return badge.text()</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "create_badge('Али')", "expected": "Участник: Али" },
+                  { "setup": "class Badge:\n    def __init__(self, name):\n        self.name = name\n    def text(self):\n        return 'FAKE: ' + self.name", "expression": "create_badge('Лейла')", "expected": "FAKE: Лейла" }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
         </article>
       </main>
     </div>

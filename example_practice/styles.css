@@ -252,7 +252,7 @@ a {
   top: var(--header-height);
   display: flex;
   flex-direction: column;
-  overflow: hidden auto;
+  overflow: hidden;
   height: calc(100vh - var(--header-height));
   padding: 24px 18px;
   border-right: 1px solid var(--line);
@@ -271,6 +271,7 @@ a {
 
 .sidebar-head {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -290,7 +291,13 @@ a {
 
 .toc-list {
   display: grid;
+  flex: 1 1 auto;
   gap: 8px;
+  align-content: start;
+  grid-auto-rows: max-content;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .toc-item {
@@ -346,8 +353,8 @@ a {
 }
 
 .sidebar-credit {
-  margin: auto 0 0;
-  padding-top: 28px;
+  flex: 0 0 auto;
+  margin: 18px 0 0;
   color: var(--sidebar-credit);
   font-size: 0.72rem;
   font-weight: 650;
