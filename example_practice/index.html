@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Practice Tasks</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="appShell">
+      <header class="topbar">
+        <button class="icon-button sidebar-toggle" id="sidebarToggle" aria-label="Скрыть левую панель" aria-expanded="true">
+          <span aria-hidden="true"></span>
+        </button>
+
+        <div class="topic-title">
+          <span class="topic-kicker">Python</span>
+          <h1>Практические задания</h1>
+        </div>
+
+        <nav class="topbar-tasks" aria-label="Быстрый выбор задания">
+          <button class="task-jump current" type="button" data-task-target="functions" aria-label="Задание 1: в ожидании проверки" aria-current="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 5h16v14H4z" />
+              <path d="m8 9 3 3-3 3" />
+              <path d="M13 15h4" />
+            </svg>
+            <span class="status-dot" aria-hidden="true"></span>
+          </button>
+          <button class="task-jump" type="button" data-task-target="arguments" aria-label="Задание 2: в ожидании проверки">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 5h16v14H4z" />
+              <path d="m8 9 3 3-3 3" />
+              <path d="M13 15h4" />
+            </svg>
+            <span class="status-dot" aria-hidden="true"></span>
+          </button>
+          <button class="task-jump" type="button" data-task-target="scope" aria-label="Задание 3: в ожидании проверки">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 5h16v14H4z" />
+              <path d="m8 9 3 3-3 3" />
+              <path d="M13 15h4" />
+            </svg>
+            <span class="status-dot" aria-hidden="true"></span>
+          </button>
+          <button class="task-jump" type="button" data-task-target="lambda" aria-label="Задание 4: в ожидании проверки">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 5h16v14H4z" />
+              <path d="m8 9 3 3-3 3" />
+              <path d="M13 15h4" />
+            </svg>
+            <span class="status-dot" aria-hidden="true"></span>
+          </button>
+        </nav>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Включить светлый вариант" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+      </header>
+
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-head">
+          <span>Оглавление</span>
+          <button class="panel-button" id="innerToggle" aria-label="Скрыть левую панель">
+            <span aria-hidden="true">←</span>
+          </button>
+        </div>
+
+        <nav class="toc-list" aria-label="Практические задания">
+          <a class="toc-item current" href="#functions" data-status="pending" aria-current="location">
+            <span>01</span>
+            <strong>Функции</strong>
+            <em>В ожидании проверки</em>
+          </a>
+          <a class="toc-item" href="#arguments" data-status="pending">
+            <span>02</span>
+            <strong>Аргументы</strong>
+            <em>В ожидании проверки</em>
+          </a>
+          <a class="toc-item" href="#scope" data-status="pending">
+            <span>03</span>
+            <strong>Область видимости</strong>
+            <em>В ожидании проверки</em>
+          </a>
+          <a class="toc-item" href="#lambda" data-status="pending">
+            <span>04</span>
+            <strong>Lambda</strong>
+            <em>В ожидании проверки</em>
+          </a>
+        </nav>
+
+        <p class="sidebar-credit">© Ivan Ivanov, 2026</p>
+      </aside>
+
+      <main class="content">
+        <article class="lesson" aria-live="polite">
+          <section id="functions" class="task-section active" data-task-title="Задание 1" data-task-name="Функции">
+            <div class="section-heading">
+              <span>01</span>
+              <h2>Функции</h2>
+            </div>
+            <p>
+              Напишите функцию <code>greet(name)</code>, которая принимает имя и возвращает строку
+              <code>Привет, {name}!</code>. Функция должна именно возвращать результат, а не печатать его.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Решение</h3>
+              </div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                  <button type="button" class="check-button" aria-label="Проверить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m5 12 5 5L20 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="functionsCode" aria-label="Исходный код Python">def greet(name):
+    return f"Привет, {name}!"</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "greet('Али')", "expected": "Привет, Али!" },
+                  { "expression": "greet('Лейла')", "expected": "Привет, Лейла!" }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="arguments" class="task-section" data-task-title="Задание 2" data-task-name="Аргументы">
+            <div class="section-heading">
+              <span>02</span>
+              <h2>Аргументы</h2>
+            </div>
+            <p>
+              Напишите функцию <code>format_user(name, age)</code>, которая возвращает строку
+              <code>{name}: {age}</code>. Возраст должен оставаться числом на входе, преобразование
+              в строку выполните внутри результата.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Решение</h3>
+              </div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                  <button type="button" class="check-button" aria-label="Проверить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m5 12 5 5L20 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="argumentsCode" aria-label="Исходный код Python">def format_user(name, age):
+    return f"{name}: {age}"</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "format_user('Нурай', 16)", "expected": "Нурай: 16" },
+                  { "expression": "format_user('Самир', 21)", "expected": "Самир: 21" }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="scope" class="task-section" data-task-title="Задание 3" data-task-name="Область видимости">
+            <div class="section-heading">
+              <span>03</span>
+              <h2>Область видимости</h2>
+            </div>
+            <p>
+              Создайте функцию <code>local_message()</code>. Внутри функции объявите локальную
+              переменную <code>message</code> со значением <code>Локальное значение</code> и верните ее.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Решение</h3>
+              </div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                  <button type="button" class="check-button" aria-label="Проверить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m5 12 5 5L20 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="scopeCode" aria-label="Исходный код Python">def local_message():
+    message = "Локальное значение"
+    return message</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "local_message()", "expected": "Локальное значение" },
+                  { "expression": "'message' in globals()", "expected": false }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="lambda" class="task-section" data-task-title="Задание 4" data-task-name="Lambda">
+            <div class="section-heading">
+              <span>04</span>
+              <h2>Lambda</h2>
+            </div>
+            <p>
+              Создайте переменную <code>square</code> и сохраните в ней lambda-функцию, которая
+              принимает число и возвращает его квадрат.
+            </p>
+
+            <div class="code-lab" data-code-lab>
+              <div class="code-lab-head">
+                <h3>Решение</h3>
+              </div>
+              <div class="code-editor-frame">
+                <div class="code-lab-actions">
+                  <button type="button" class="run-button" aria-label="Запустить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="copy-code-button" aria-label="Скопировать код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 7a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V7Z" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                  <button type="button" class="check-button" aria-label="Проверить код">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m5 12 5 5L20 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="code-editor" aria-label="Редактор Python-кода"></div>
+              </div>
+              <textarea class="code-source" name="lambdaCode" aria-label="Исходный код Python">square = lambda number: number ** 2</textarea>
+              <script type="application/json" class="task-tests">
+                [
+                  { "expression": "square(5)", "expected": 25 },
+                  { "expression": "square(-3)", "expected": 9 }
+                ]
+              </script>
+              <div class="code-output" aria-live="polite"></div>
+            </div>
+          </section>
+        </article>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
