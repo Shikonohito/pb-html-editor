@@ -244,6 +244,41 @@ function appendOutput(output, text) {
   output.scrollTop = output.scrollHeight;
 }
 
+function requestCodeInput(output, promptText) {
+  return new Promise((resolve) => {
+    output.classList.add("is-waiting");
+    appendOutput(output, promptText || "");
+
+    const form = document.createElement("form");
+    form.className = "code-input-form";
+    form.innerHTML = `
+      <div class="code-input-row">
+        <input class="code-input" type="text" autocomplete="off" />
+        <button class="code-input-submit" type="submit">Ввести</button>
+      </div>
+    `;
+
+    const input = form.querySelector(".code-input");
+    output.append(form);
+    input.focus();
+    output.scrollTop = output.scrollHeight;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const value = input.value;
+
+      form.remove();
+      output.classList.remove("is-waiting");
+      appendOutput(output, `${value}\n`);
+      resolve(value);
+    });
+  });
+}
+
+function prepareInteractiveCode(code) {
+  return code.replace(/\binput\s*\(/g, "await input(");
+}
+
 function getCodeLabCode(lab) {
   const source = lab.querySelector(".code-source");
   return lab.editor ? lab.editor.getValue() : source.value;
@@ -317,7 +352,22 @@ async function runCodeLab(lab) {
     pyodide.setStderr({
       batched: (text) => appendOutput(output, `${text}\n`),
     });
-    await pyodide.runPythonAsync(code);
+    window.lessonRequestInput = (promptText) => requestCodeInput(output, promptText);
+    pyodide.setStdin({
+      stdin: () => "",
+    });
+
+    const wrappedCode = `
+import builtins
+from js import lessonRequestInput
+
+async def input(prompt=""):
+    return await lessonRequestInput(prompt)
+
+${prepareInteractiveCode(code)}
+`;
+
+    await pyodide.runPythonAsync(wrappedCode);
 
     if (!output.textContent.trim()) {
       appendOutput(output, "Код выполнен без вывода.\n");
